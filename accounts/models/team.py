@@ -6,8 +6,8 @@ class Team(models.Model):
     password = models.CharField(max_length=50)
     college_name = models.CharField(max_length=50, unique=True)
     score = models.IntegerField(default=0)
-    created_time = models.DateTimeField(default=timezone.now, auto_now=False, auto_now_add=False)
-    updated_time = models.TimeField(default=timezone.now, auto_now=True, auto_now_add=False)
+    created_time = models.DateTimeField(auto_now_add=True)
+    updated_time = models.TimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Team"

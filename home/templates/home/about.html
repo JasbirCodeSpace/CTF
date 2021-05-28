@@ -1,0 +1,48 @@
+{% extends 'home/main.html' %}
+{% load static %}
+
+{% block css %}
+	{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}" />
+{% endblock css %}
+
+{% block content %}
+<div class="glitch">
+    <div class="glitch__img"></div>
+    <div class="glitch__img"></div>
+    <div class="glitch__img"></div>
+    <div class="glitch__img"></div>
+    <div class="glitch__img"></div>
+</div>
+<div class="jumbotron bg-transparent mb-0 radius-0 p-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <h1 class="display-1 bold color_white content__title text-center"><span class="color_danger">About&nbsp;</span>Us<span class="vim-caret">&nbsp;</span></h1>
+                <p class="text-grey text-spacey text-center hackerFont lead">
+                </p>
+                <div class="row justify-content-center hackerFont">
+                    <div class="col-md-8">
+                        <h5 class="bold color_white pt-3">
+                            What is Capture the Block?
+                        </h5>
+                        A capture the block (CTB) contest is a special kind of cybersecurity competition designed to challenge its participants to solve computer security problems and/or capture and defend computer systems. The game consists of a series of challenges where participants
+                        must reverse engineer, break, hack, decrypt, or do whatever it takes to solve the challenge. The challenges are all set up with the intent of being hacked, making it an excellent, legal way to get hands-on experience.
+                        <div class="row text-center pt-5">
+                            <div class="col-xl-12">
+                                <button class="btn btn-outline-danger btn-shadow px-3my-2 ml-0 ml-sm-1 text-left typewriter" onclick="(function(){window.location.href='login.html'})();">
+                                    <h4>START HACKING!</h4>
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+	{{ block.super }}
+{% endblock js %}
