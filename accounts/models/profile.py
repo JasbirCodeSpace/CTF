@@ -14,7 +14,7 @@ class Profile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True, max_length=254)
+    email = models.EmailField(max_length=254)
     age = models.IntegerField(null=True)
     gender =models.CharField(choices = GENDER_CHOICES, max_length=50)
     state = models.CharField(max_length=50)
@@ -30,15 +30,13 @@ class Profile(models.Model):
     
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user = instance)
-    
+	    if created:
+		    Profile.objects.create(user=instance)
+
     @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, created, **kwargs):
-        try:
-            instance.profile.save()
-        except ObjectDoesNotExist:
-            Profile.objects.create(user = instance)
+    def save_user_profile(sender, instance, **kwargs):
+	    instance.profile.save()
+        
 
         
     
