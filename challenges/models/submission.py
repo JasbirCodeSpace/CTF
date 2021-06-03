@@ -1,13 +1,14 @@
+from challenges.models.challenge import Challenge
 from django.db import models
 from django.utils import timezone
-from accounts.models import Team
-from problems.models import Problem
+from challenges.models import Challenge
+from django.contrib.auth.models import User
 
 class Submission(models.Model):
 
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    time = models.DateTimeField(default=timezone.now)
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
     correct = models.BooleanField(default=False)
 
     class Meta:
@@ -15,4 +16,4 @@ class Submission(models.Model):
         verbose_name_plural = "Submissions"
 
     def __str__(self):
-        return "{} solved {} at {}".format(self.team, self.problem, self.time)
+        return "{} solved {} at {}".format(self.team, self.challenge, self.time)

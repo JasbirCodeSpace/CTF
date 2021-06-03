@@ -1,0 +1,108 @@
+{% extends 'home/main.html' %}
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/challenges.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="jumbotron bg-transparent mb-0 p-0 radius-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div>
+                    <h1 class="display-5 bold color_white content__title text-center"><span class="color_danger">Battle&nbsp;</span>Field<span class="vim-caret">&nbsp;</span></h1>
+                </div>
+                <p class="text-grey lead text-spacey text-center hackerFont">
+                    Where the hackers get's ranked!
+                </p>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="row hackerFont"> {% for challenge in challenges %}
+                <div class="col-md-6 mb-3">
+                    <div class="card {{ question.category }}">
+
+                        
+                        {#% if question.Qid in submission %#}
+
+                             <div class="card-header " data-target="#problem_id_{{ question.Qid }}" data-toggle="collapse" aria-expanded="false" aria-controls="problem_id_{{ question.Qid }}">
+                             {{ question.Qtitle }} <span class="badge">{{ question.points }} points</span>
+                            </div>
+                        {#%endif%#}
+
+                        <div id="problem_id_{{ question.Qid }}" class="collapse card-body">
+                            <blockquote class="card-blockquote">
+                                <div style="display: flex;">
+                                    <h6 class="solvers">Solvers:{{ question.solved_by }} &nbsp;<span class="color_danger">Difficulty:</span> </h6>
+                                    <div class="pl-2"><canvas style="width:80px;height:15px" id="problem_id_{{ question.Qid }}_chart"></canvas></div>
+                                </div>
+                                <p>{{ question.Qdes }}</p>
+                                <form method="POST"  id="my_event_form">
+				                {% csrf_token %}
+                                <a target="_blank" href="#!" class="btn btn-outline-secondary btn-shadow"><span class="fa fa-download mr-2"></span>Download</a>
+                                <a href="#hint" data-toggle="modal" data-target="#hint" class="btn btn-outline-secondary btn-shadow" onclick="getHint({{question.Qid}})"><span class="far fa-lightbulb mr-2"></span>Hint</a>
+                                <div class="input-group mt-3" >
+                                    <div class="ht-tm-element custom-control custom-radio">
+                                        <input type="radio" value="E" id="customRadio2_p{{ question.Qid }}" name="customRadio" class="custom-control-input">
+                                        <label class="custom-control-label" for="customRadio2_p{{ question.Qid }}" required>Easy</label>
+                                    </div>
+                                    <div class="ht-tm-element custom-control custom-radio">
+                                        <input type="radio" value="M" id="customRadio3_p{{ question.Qid }}" name="customRadio" class="custom-control-input">
+                                        <label class="custom-control-label" for="customRadio3_p{{ question.Qid }}" required>Medium</label>
+                                    </div>
+                                    <div class="ht-tm-element custom-control custom-radio">
+                                        <input type="radio" value="H" id="customRadio4_p{{ question.Qid }}" name="customRadio" class="custom-control-input">
+                                        <label class="custom-control-label" for="customRadio4_p{{ question.Qid }}" required>Hard</label>
+                                    </div>
+                                </div>
+                                <div class="input-group mt-3">
+                                    <input type="text" name="flag" class="form-control" placeholder="Enter Flag" aria-label="Enter Flag" aria-describedby="basic-addon2" required>
+                                    <input type="hidden" name="Qid" id="Qid" value={{question.Qid}}>
+                                    <div class="input-group-append">
+
+                                     <button  class="btn btn-outline-secondary" type="submit">Go!</button>
+
+                                    </div>
+                                </div>
+                                </form>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div> {% endfor %}
+            </div>
+            <div class="row hackerFont justify-content-center mt-5">
+                <div class="col-md-12">
+                    Chart Difficulties:
+                    <span style="color:#17b06b">Easy,</span>
+                    <span style="color:#ffce56">Medium,</span>
+                    <span style="color:#ef121b">Hard,</span>
+                    <br><br>Challenge Types:
+                    <span class="p-1" style="background-color:#ef121b94">Web</span>
+                    <span class="p-1" style="background-color:#17b06b94">Reversing</span>
+                    <span class="p-1" style="background-color:#f9751594">Steganography</span>
+                    <span class="p-1" style="background-color:#36a2eb94">Pwning</span>
+                    <span class="p-1" style="background-color:#9966FF94">Cryptography</span>
+                    <span class="p-1" style="background-color:#ffce5694">Other</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="hint" tabindex="-1" role="dialog" aria-labelledby="hint label" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p id="hintParagraph">Here goes the hint</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock content %}
+{% block js %}
+    {{ block.super }}
+{% endblock js %}
