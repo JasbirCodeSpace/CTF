@@ -41,7 +41,6 @@ def profile_login(request):
     if request.method == 'POST':
         form = LoginForm(data = request.POST)
         if form.is_valid():
-            print(form)
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username = username, password = password)

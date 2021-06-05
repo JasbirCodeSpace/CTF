@@ -19,8 +19,8 @@ class Profile(models.Model):
     gender =models.CharField(choices = GENDER_CHOICES, max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
-    team = models.ForeignKey("accounts.Team", blank=True, null=True, on_delete=models.SET_NULL)
-
+    score = models.IntegerField(default=0)
+    team = models.ForeignKey("teams.Team", blank=True, null=True, on_delete=models.SET_NULL)
     class Meta:
         verbose_name = "Profile"
         verbose_name_plural = "Profiles"
