@@ -1,107 +1,147 @@
 {% extends 'home/main.html' %}
 {% load static %}
+{% load challenge_filters %}
 
 {% block css %}
     {{ block.super }}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/challenges.css' %}">
 {% endblock css %}
 
 {% block content %}
-<div class="jumbotron bg-transparent mb-0 p-0 radius-0">
+<div class="jumbotron bg-transparent mb-0 pt-0 radius-0">
     <div class="container">
         <div class="row">
-            <div class="col-xl-12">
-                <div>
-                    <h1 class="display-5 bold color_white content__title text-center"><span class="color_danger">Battle&nbsp;</span>Field<span class="vim-caret">&nbsp;</span></h1>
-                </div>
-                <p class="text-grey lead text-spacey text-center hackerFont">
-                    Where the hackers get's ranked!
+            <div class="col-xl-12  text-center">
+                <h1 class="display-1 bold color_white content__title"><span class="color_danger">Battle&nbsp;</span>Field<span class="vim-caret">&nbsp;</span></h1>
+                <p class="text-grey text-spacey hackerFont lead mb-5">
+                    Its time to show the world what you can do!
+
                 </p>
             </div>
         </div>
-        <div class="row justify-content-center mt-3">
-            <div class="row hackerFont"> {% for challenge in challenges %}
-                <div class="col-md-6 mb-3">
-                    <div class="card {{ question.category }}">
 
-                        
-                        {#% if question.Qid in submission %#}
-
-                             <div class="card-header " data-target="#problem_id_{{ question.Qid }}" data-toggle="collapse" aria-expanded="false" aria-controls="problem_id_{{ question.Qid }}">
-                             {{ question.Qtitle }} <span class="badge">{{ question.points }} points</span>
-                            </div>
-                        {#%endif%#}
-
-                        <div id="problem_id_{{ question.Qid }}" class="collapse card-body">
-                            <blockquote class="card-blockquote">
-                                <div style="display: flex;">
-                                    <h6 class="solvers">Solvers:{{ question.solved_by }} &nbsp;<span class="color_danger">Difficulty:</span> </h6>
-                                    <div class="pl-2"><canvas style="width:80px;height:15px" id="problem_id_{{ question.Qid }}_chart"></canvas></div>
-                                </div>
-                                <p>{{ question.Qdes }}</p>
-                                <form method="POST"  id="my_event_form">
-				                {% csrf_token %}
-                                <a target="_blank" href="#!" class="btn btn-outline-secondary btn-shadow"><span class="fa fa-download mr-2"></span>Download</a>
-                                <a href="#hint" data-toggle="modal" data-target="#hint" class="btn btn-outline-secondary btn-shadow" onclick="getHint({{question.Qid}})"><span class="far fa-lightbulb mr-2"></span>Hint</a>
-                                <div class="input-group mt-3" >
-                                    <div class="ht-tm-element custom-control custom-radio">
-                                        <input type="radio" value="E" id="customRadio2_p{{ question.Qid }}" name="customRadio" class="custom-control-input">
-                                        <label class="custom-control-label" for="customRadio2_p{{ question.Qid }}" required>Easy</label>
-                                    </div>
-                                    <div class="ht-tm-element custom-control custom-radio">
-                                        <input type="radio" value="M" id="customRadio3_p{{ question.Qid }}" name="customRadio" class="custom-control-input">
-                                        <label class="custom-control-label" for="customRadio3_p{{ question.Qid }}" required>Medium</label>
-                                    </div>
-                                    <div class="ht-tm-element custom-control custom-radio">
-                                        <input type="radio" value="H" id="customRadio4_p{{ question.Qid }}" name="customRadio" class="custom-control-input">
-                                        <label class="custom-control-label" for="customRadio4_p{{ question.Qid }}" required>Hard</label>
-                                    </div>
-                                </div>
-                                <div class="input-group mt-3">
-                                    <input type="text" name="flag" class="form-control" placeholder="Enter Flag" aria-label="Enter Flag" aria-describedby="basic-addon2" required>
-                                    <input type="hidden" name="Qid" id="Qid" value={{question.Qid}}>
-                                    <div class="input-group-append">
-
-                                     <button  class="btn btn-outline-secondary" type="submit">Go!</button>
-
-                                    </div>
-                                </div>
-                                </form>
-                            </blockquote>
+        <div class="row hackerFont"> 
+            {% for challenge in challenges %}
+            <div class="col-md-4 mb-3">
+                <div class="card category_{{ challenge.category }}" data-toggle="modal" data-target="#challenge_{{forloop.counter}}">
+                    <div class="card-header">
+                        {{ challenge.title }}
+                        <div class="my-2">
+                            <span class="badge">{{ challenge.score }} points</span>
                         </div>
                     </div>
-                </div> {% endfor %}
-            </div>
-            <div class="row hackerFont justify-content-center mt-5">
-                <div class="col-md-12">
-                    Chart Difficulties:
-                    <span style="color:#17b06b">Easy,</span>
-                    <span style="color:#ffce56">Medium,</span>
-                    <span style="color:#ef121b">Hard,</span>
-                    <br><br>Challenge Types:
-                    <span class="p-1" style="background-color:#ef121b94">Web</span>
-                    <span class="p-1" style="background-color:#17b06b94">Reversing</span>
-                    <span class="p-1" style="background-color:#f9751594">Steganography</span>
-                    <span class="p-1" style="background-color:#36a2eb94">Pwning</span>
-                    <span class="p-1" style="background-color:#9966FF94">Cryptography</span>
-                    <span class="p-1" style="background-color:#ffce5694">Other</span>
                 </div>
             </div>
-        </div>
-        <div class="modal fade" id="hint" tabindex="-1" role="dialog" aria-labelledby="hint label" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <p id="hintParagraph">Here goes the hint</p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
 
         </div>
-        </div>
-        
-    </div>
-</div>
+
+        {% for challenge in challenges %}
+          <div class="modal fade" id="challenge_{{ forloop.counter }}" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <button type="button" class="close btn-close-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <ul class="nav nav-tabs">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#challenge">Challenge</a>
+                  </li>
+                  
+                    <li class="nav-item">
+                      <a class="nav-link challenge-solves" data-toggle="tab" href="#solves">
+                        
+                          4 Solves
+                        
+                      </a>
+                    </li>
+                  
+                </ul>
+                <div role="tabpanel">
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade active show" id="challenge">
+                      <h2 class="challenge-name text-center pt-3">
+                        {{ challenge.title }}
+                      </h2>
+                      <h3 class="challenge-value text-center">
+                        {{ challenge.score }}
+                      </h3>
+          
+                      <div class="challenge-tags text-center">
+                        <span class="badge align-self-end">{{ challenge.category }}</span>
+                        <span class="badge align-self-end">{{ challenge.score }} points</span>
+                        <span class="badge align-self-end">{{ challenge.difficulty|difficulty }}</span>
+                      </div>
+                      
+                      <div class="row m-2">
+                        <p>{{ challenge.description }}</p>
+                      </div>
+                      <div class="row m-2">
+                        {% if challenge.file %}
+                        <a target="_blank" href="uploads/{{challenge.file}}" class="btn btn-outline-danger btn-shadow"><span class="fa fa-download mr-2"></span>Download</a>
+                        {% endif %}
+                        {% if challenge.hint %}
+                        <a href="#hint_{{ forloop.counter }}" data-toggle="modal" data-target="#challenge_hint_{{forloop.counter}}" class="btn btn-outline-danger btn-shadow"><span class="far fa-lightbulb mr-2"></span>Hint</a>
+                        {% endif %}
+                      </div>
+                      <div class="row justify-content-center m-2">
+                        <form method="post">
+                          <input id="challenge-id" class="challenge-id" type="hidden" value="6">
+                          <div class="input-group mt-3">
+                            <input type="text" class="form-control" placeholder="Enter Flag" aria-label="Enter Flag" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button id="submit_p3" class="btn btn-outline-secondary btn-shadow" type="button">Submit</button>
+                            </div>
+                        </div>
+                        </form>
+                      </div>
+          
+                      <div class="row notification-row">
+                        <div class="col-md-12">
+                          <div id="result-notification" class="alert alert-dismissable text-center w-100" role="alert" style="display: none;">
+                            <strong id="result-message"></strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+          
+                    <div role="tabpanel" class="tab-pane fade" id="solves">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <table class="table table-striped text-center">
+                            <thead>
+                            <tr>
+                              <td><b>Name</b>
+                              </td>
+                              <td><b>Date</b>
+                              </td>
+                            </tr>
+                            </thead>
+                            <tbody id="challenge-solves-names">
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          {% if challenge.hint %}
+          <div class="modal" id="challenge_hint_{{ forloop.counter }}" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-top" role="document">
+              <div class="modal-content">
+                  <div class="alert alert-danger mb-0" role="alert">
+                    <strong>Hint: </strong>{{ challenge.hint }}
+                  </div>                  
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
 {% endblock content %}
 {% block js %}
     {{ block.super }}

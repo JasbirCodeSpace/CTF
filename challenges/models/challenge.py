@@ -15,7 +15,7 @@ class Challenge(models.Model):
     )
 
     title = models.CharField(max_length=50)
-    decription = models.TextField()
+    description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     difficulty = models.IntegerField(choices=CHALLENGE_DIFFICULTY)
     hint = models.TextField()

@@ -22,6 +22,71 @@
 	--blend-color-4: #fb909a;
 	--blend-color-5: #1c1cc9;
 }
+
+
+.solved .badge {
+    background-color: #17b06b94;
+    border: 1px solid #17b06b;
+    color: white;
+}
+
+.badge {
+    border: 1px solid #16a4de;
+}
+
+.solved {
+    background-color: #FFFFFF14;
+}
+
+.solvers {
+    color: #36a2eb;
+      font-size: 1rem;
+}
+
+.solver_num {
+    color: white;
+}
+
+.machine .solvers {
+    font-size: 1rem!important;
+}
+
+.machine_page .solvers {
+    font-size: 1.25rem!important;
+}
+
+.ip {
+    padding-right: 20px;
+}
+
+.category_WEB {
+    border-top: 4px solid #ef121b94;
+}
+
+.category_reversing {
+    border-top: 4px solid #17b06b94;
+}
+
+.category_steg {
+    border-top: 4px solid #f9751594;
+}
+
+.category_pwning {
+    border-top: 4px solid #36a2eb94;
+}
+
+.category_misc {
+    border-top: 4px solid #ffce5694;
+}
+
+.category_crypt {
+    border-top: 4px solid #9966FF94;
+}
+
+.hackerFont {
+    font-family: Hack, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
 .content__title {
 	font-size: 7vh;
 	margin: 25vh 0 0 0;
@@ -312,4 +377,21 @@
 		font-size: 5vh;
 	}
 
+}
+
+a.nav-link.active{
+	color: #fff;
+}
+
+a.nav-link{
+	color: #ef121b;
+}
+
+.close{
+	color: #fff;
+	opacity: 1;
+}
+
+.close:focus{
+	outline: none;
 }
