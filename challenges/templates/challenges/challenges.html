@@ -1,7 +1,6 @@
 {% extends 'home/main.html' %}
 {% load static %}
 {% load challenge_filters %}
-
 {% block css %}
     {{ block.super }}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
@@ -87,12 +86,13 @@
                         {% endif %}
                       </div>
                       <div class="row justify-content-center m-2">
-                        <form method="post">
-                          <input id="challenge-id" class="challenge-id" type="hidden" value="6">
+                        <form method="post" id="challenge_id_{{ challenge.id }}_form" action="{% url 'flagsubmit' %}">
+                          {% csrf_token %}
+                          <input name="challenge-id" class="challenge-id" type="hidden" value="{{challenge.id}}">
                           <div class="input-group mt-3">
-                            <input type="text" class="form-control" placeholder="Enter Flag" aria-label="Enter Flag" aria-describedby="basic-addon2">
+                            <input type="text" name="challenge-flag" class="form-control" placeholder="Enter Flag" aria-label="Enter Flag" aria-describedby="basic-addon2" required>
                             <div class="input-group-append">
-                                <button id="submit_p3" class="btn btn-outline-secondary btn-shadow" type="button">Submit</button>
+                                <button id="submit_p3" class="btn btn-outline-secondary btn-shadow" type="submit">Submit</button>
                             </div>
                         </div>
                         </form>
@@ -134,13 +134,28 @@
           <div class="modal" id="challenge_hint_{{ forloop.counter }}" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog  modal-dialog-top" role="document">
               <div class="modal-content">
-                  <div class="alert alert-danger mb-0" role="alert">
+                  <div class="alert alert-info mb-0" role="alert">
                     <strong>Hint: </strong>{{ challenge.hint }}
                   </div>                  
               </div>
             </div>
           </div>
           {% endif %}
+          <script type="text/javascript">
+            $(document).ready(function (){
+              $("#challenge_id_{{ challenge.id }}_form").submit(function(event) {
+                $.ajax({
+                  type : "POST",
+                  url : "{% url 'flagsubmit' %}",
+                  data : $(this).serialize(),
+                  success : function(response) {
+                    $("#challenge_id_{{ mission.challenge_id }}_form").append(response)
+                  }
+                });
+                event.preventDefault();
+              });
+            });
+          </script>
         {% endfor %}
 {% endblock content %}
 {% block js %}

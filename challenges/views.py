@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from accounts.models import Profile
 from teams.models import Team
 from challenges.models import Challenge, Submission
+from django.http import HttpResponse
 
 @login_required(login_url='profile-login')
 def challenges(request):
@@ -14,3 +15,22 @@ def challenges(request):
     problems = Challenge.objects.all()
     submissions = Submission.objects.filter(user = user)
     return render(request, 'challenges/challenges.html', {'profile':profile, 'challenges':problems, 'submissions':submissions})
+
+@login_required(login_url='profile-login')
+def flagsubmit(request):
+
+    if request.method == 'POST':
+        challenge_id = request.POST['challenge-id']
+        challenge_flag = request.POST['challenge-flag']
+
+        challenge = Challenge.objects.get(id = challenge_id)
+        flag = challenge.flag
+        points = challenge.score
+
+        if challenge_flag == flag:
+            response = '<div id="flag_incorrect"><p>INCORRECT</p></div>'
+        else:
+            response = '<div id="flag_incorrect"><p>INCORRECT</p></div>'
+    else:
+        pass
+    return HttpResponse('done')
