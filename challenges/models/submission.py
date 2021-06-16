@@ -16,4 +16,4 @@ class Submission(models.Model):
         verbose_name_plural = "Submissions"
 
     def __str__(self):
-        return "{} solved {} at {}".format(self.team, self.challenge, self.time)
+        return "{} solved {} at {}".format(self.user, self.challenge, self.timestamp)

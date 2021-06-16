@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from accounts.models import Profile
 from teams.models import Team
 from challenges.models import Challenge, Submission
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 @login_required(login_url='profile-login')
 def challenges(request):
@@ -28,9 +28,19 @@ def flagsubmit(request):
         points = challenge.score
 
         if challenge_flag == flag:
-            response = '<div id="flag_incorrect"><p>INCORRECT</p></div>'
+            prev_submission = Submission.objects.get(challenge = challenge, user = request.user)
+            if prev_submission and prev_submission.correct:
+                response = 'Already Submitted'
+            else:
+                flag_submission = Submission(challenge = challenge, user = request.user, correct = True)
+                flag_submission.save()
+
+                initial_score = Profile.objects.get(user = request.user).score
+                new_score = initial_score + points
+                Profile.objects.filter(user = request.user).update(score = new_score)
+                response = 'Correct'
         else:
-            response = '<div id="flag_incorrect"><p>INCORRECT</p></div>'
+            response = 'Incorrect'
     else:
-        pass
-    return HttpResponse('done')
+        response = 'Invalid Request'
+    return JsonResponse({'msg': response})
