@@ -20,7 +20,7 @@ class Profile(models.Model):
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
     score = models.IntegerField(default=0)
-    team = models.ForeignKey("teams.Team", blank=True, null=True, on_delete=models.SET_NULL)
+    team = models.ForeignKey("teams.Team", blank=True, null=True, on_delete=models.SET_NULL, related_name='users')
     class Meta:
         verbose_name = "Profile"
         verbose_name_plural = "Profiles"

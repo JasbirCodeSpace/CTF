@@ -53,7 +53,7 @@
                     <li class="nav-item">
                       <a class="nav-link challenge-solves" data-toggle="tab" href="#solves">
                         
-                          4 Solves
+                          {{ challenge.solves.all|length }} Solves
                         
                       </a>
                     </li>
@@ -121,6 +121,12 @@
                             </tr>
                             </thead>
                             <tbody id="challenge-solves-names">
+                              {% for submission in challenge.solves.all %}
+                              <tr>
+                                <td>{{ submission.user.user.username }}</td>
+                                <td>{{ submission.timestamp|date:'Y-m-d H:i' }}</td>
+                              </tr>
+                              {% endfor %}
                             </tbody>
                           </table>
                         </div>

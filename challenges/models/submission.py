@@ -2,12 +2,12 @@ from challenges.models.challenge import Challenge
 from django.db import models
 from django.utils import timezone
 from challenges.models import Challenge
-from django.contrib.auth.models import User
+from accounts.models import Profile
 
 class Submission(models.Model):
 
-    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, related_name='solves')
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='submissions')
     timestamp = models.DateTimeField(default=timezone.now)
     correct = models.BooleanField(default=False)
 

@@ -13,8 +13,7 @@ def challenges(request):
     user = User.objects.get(username = request.user.username)
     profile = Profile.objects.get(user = user)
     problems = Challenge.objects.all()
-    submissions = Submission.objects.filter(user = user)
-    return render(request, 'challenges/challenges.html', {'profile':profile, 'challenges':problems, 'submissions':submissions})
+    return render(request, 'challenges/challenges.html', {'profile':profile, 'challenges':problems})
 
 @login_required(login_url='profile-login')
 def flagsubmit(request):
@@ -24,15 +23,17 @@ def flagsubmit(request):
         challenge_flag = request.POST['challenge-flag']
 
         challenge = Challenge.objects.get(id = challenge_id)
+        user_profile = Profile.objects.get(user = request.user)
+
         flag = challenge.flag
         points = challenge.score
 
         if challenge_flag == flag:
-            prev_submission = Submission.objects.get(challenge = challenge, user = request.user)
-            if prev_submission and prev_submission.correct:
+            prev_submission = Submission.objects.filter(challenge = challenge, user = user_profile)
+            if prev_submission and prev_submission.first().correct:
                 response = 'Already Submitted'
             else:
-                flag_submission = Submission(challenge = challenge, user = request.user, correct = True)
+                flag_submission = Submission(challenge = challenge, user = user_profile, correct = True)
                 flag_submission.save()
 
                 initial_score = Profile.objects.get(user = request.user).score
@@ -44,3 +45,10 @@ def flagsubmit(request):
     else:
         response = 'Invalid Request'
     return JsonResponse({'msg': response})
+
+def get_challenge_submissions():
+    challenges = Challenge.objects.all()
+    result = {}
+    for challenge in challenges:
+        result[challenge] = challenge.solves.all()
+    return result
