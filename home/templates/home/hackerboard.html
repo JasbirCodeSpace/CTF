@@ -35,34 +35,15 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for team in teams %}
                         <tr>
-                            <th scope="row">1</th>
-                            <td>liveoverflow</td>
-                            <td>8</td>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{team.name}}</td>
+                            <td>{{team.solves}}</td>
                             <td>42:59</td>
-                            <td>2540</td>
+                            <td>{{team.score}}</td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>CR007</td>
-                            <td>6</td>
-                            <td>44:59</td>
-                            <td>1900</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>anonymous</td>
-                            <td>4</td>
-                            <td>40:00</td>
-                            <td>650</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td>ashawe</td>
-                            <td>5</td>
-                            <td>40:10</td>
-                            <td>550</td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
