@@ -367,4 +367,7 @@
 	.content__title{
 		margin: 70vh 0 0 0;
 	}
+	.fixed-top{
+		position: fixed !important;
+	}
 }
