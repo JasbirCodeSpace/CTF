@@ -43,3 +43,39 @@ def team_join(request):
     else:
         form = TeamRegister()
     return render(request, 'teams/team-join.html', {'form':form}) 
+
+@login_required
+def team_view(request):
+    id = request.GET.get('id', None)
+    if id is None:
+        id = request.user.profile.team.id
+    team = Team.objects.get(id = id)
+    if not team:
+        return render(request, 'teams/team-create.html')
+    
+    members, submissions, score = get_team_stats(team)
+
+    return render(request, 'teams/team.html', {'team':team, 'score': score, 'members': members, 'submissions': submissions})
+
+def get_team_stats(team):
+    users = team.users.all()
+    team_submissions = {}
+
+    for user in users:
+        submissions = user.submissions.filter(correct=True)
+        for submission in submissions:
+            challenge = submission.challenge
+            if challenge not in team_submissions:
+                team_submissions[challenge] = submission
+            elif challenge in team_submissions and submission.timestamp<team_submissions[challenge].timestamp:
+                team_submissions[challenge] = submission
+    
+    num_solved = len(team_submissions)
+    team_score = 0
+
+    submissions = []
+    for challenge, submission in team_submissions.items():
+        team_score += challenge.score
+        submissions.append(submission)
+    
+    return users,submissions, team_score

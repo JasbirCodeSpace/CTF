@@ -1,0 +1,143 @@
+{% extends 'home/main.html' %}
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/team.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="jumbotron bg-transparent mb-0 pt-3 radius-0">
+    <div class="container">
+        <h1 class="display-3 bold color_white content__title text-center">{{team.team_name}}</h1>
+        <h5 class="display-5  text-center">Members: <span class="badge badge-primary">{{members|length}}</span></h5>
+        <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
+    </div>
+    <div class="container">
+        <div class="members-table my-5">
+            <h3 class="display-5">Members:</h3>
+            <div class="row justify-content-center">
+                <div class="col-xl-12 ">
+                    <table class="table score-col table-hover table-striped table-responsive-sm">
+                        <thead class="thead-dark hackerFont">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in members %}
+                                <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{member.user.username}}</td>
+                                <td>{{member.score}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        </div>
+        <div class="charts my-5">
+        <div class="row">
+          <div class="col-sm-6">
+              <h5 class="display-5 text-center">Solve Percentage</h5>
+            <canvas id="solves-pie-chart"   data-url="{% url 'team-solves-pie-chart' %}"></canvas>
+          </div>
+          <div class="col-sm-6">
+            <h5 class="display-5 text-center">Category Breakdown</h5>
+            <canvas id="category-pie-chart"   data-url="{% url 'team-category-pie-chart' %}"></canvas>
+          </div>
+        </div>
+        </div>
+
+        <div class="solves-table my-5">
+            <h3 class="display-5">Submissions:</h3>
+            <div class="row justify-content-center">
+                <div class="col-xl-12 ">
+                    <table class="table score-col table-hover table-striped table-responsive-sm">
+                        <thead class="thead-dark hackerFont">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                                <th>Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for submission in submissions %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{submission.challenge.title}}</td>
+                                <td>{{submission.challenge.score}}</td>
+                                <td>{{submission.timestamp|date:'Y-m-d H:i'}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        </div>
+    </div>
+    
+    
+
+</div>
+{% endblock content %}
+{% block js %}
+    {{ block.super }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-deferred@1"></script>
+    <script>
+        let solvesChart = $('#solves-pie-chart');
+        let categoryChart = $('#category-pie-chart');
+        Chart.defaults.global.defaultFontSize = 18;
+        Chart.defaults.global.defaultFontColor = '#fff';
+        const drawPieChart = (canvasID, labels, data)=>{
+            var canvas = document.getElementById(canvasID).getContext('2d');
+
+
+            var canvasData = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: data,
+                        backgroundColor: [
+                            "#FF6384",
+                            "#63FF84",
+                            "#84FF63",
+                            "#8463FF",
+                            "#6384FF"
+                        ]
+                    }],
+                    hoverOffset: 4,
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
+                }
+            };
+
+            let pieChart = new Chart(canvas, {
+            type: 'pie',
+            data: canvasData,
+            width:200,
+            height:200,
+            });
+        }
+        $.ajax({
+            url: solvesChart.data("url"),
+            success: function (data) {
+                drawPieChart('solves-pie-chart', data.labels, data.data)
+            }
+        });
+
+        $.ajax({
+            url: categoryChart.data("url"),
+            success: function (data) {
+                drawPieChart('category-pie-chart', data.labels, data.data)
+            }
+        });
+    </script>
+{% endblock js %}
