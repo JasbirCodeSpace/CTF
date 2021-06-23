@@ -21,5 +21,6 @@ urlpatterns = [
     path('profile/', include('accounts.urls')),
     path('teams/', include('teams.urls')),
     path('challenges/', include('challenges.urls')),
+    path('stats/', include('stats.urls')),
     path('', include('home.urls')),
 ]

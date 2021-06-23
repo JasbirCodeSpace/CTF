@@ -19,7 +19,8 @@ def get_team_stats(team):
     for user in users:
         submissions = user.submissions.all()
         for submission in submissions:
-            solved_challenges.add(submission.challenge)
+            if submission.correct:
+                solved_challenges.add(submission.challenge)
     
     num_solved = len(solved_challenges)
     team_score = 0
