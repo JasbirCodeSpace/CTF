@@ -48,6 +48,8 @@ def team_join(request):
 def team_view(request):
     id = request.GET.get('id', None)
     if id is None:
+        if not request.user.profile.team:
+            return redirect('team-create')
         id = request.user.profile.team.id
     team = Team.objects.get(id = id)
     if not team:

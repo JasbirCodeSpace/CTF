@@ -77,9 +77,11 @@ def profile_view(request):
     if id is None:
         id = request.user.id
     user = User.objects.get(id=id)
-    team = user.profile.team.team_name
+    team = user.profile.team
     if not team:
         team = "None"
+    else:
+        team = team.team_name
     score = user.profile.score
     solves = user.profile.submissions.filter(correct=True)
 
