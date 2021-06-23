@@ -4,6 +4,7 @@
 {% block css %}
     {{ block.super }}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/challenges.css' %}">
 {% endblock css %}
 
@@ -53,7 +54,7 @@
                     <li class="nav-item">
                       <a class="nav-link challenge-solves" data-toggle="tab" href="#solves">
                         
-                          {{ challenge.solves.all|length }} Solves
+                          {{ challenge.solves.all|correct_solves|length }} Solves
                         
                       </a>
                     </li>
@@ -121,7 +122,7 @@
                             </tr>
                             </thead>
                             <tbody id="challenge-solves-names">
-                              {% for submission in challenge.solves.all %}
+                              {% for submission in challenge.solves.all|correct_solves %}
                               <tr>
                                 <td>{{ submission.user.user.username }}</td>
                                 <td>{{ submission.timestamp|date:'Y-m-d H:i' }}</td>

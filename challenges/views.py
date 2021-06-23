@@ -29,8 +29,8 @@ def flagsubmit(request):
         points = challenge.score
 
         if challenge_flag == flag:
-            prev_submission = Submission.objects.filter(challenge = challenge, user = user_profile)
-            if prev_submission and prev_submission.first().correct:
+            prev_submission = Submission.objects.filter(challenge = challenge, user = user_profile, correct = True)
+            if prev_submission.first():
                 response = 'Already Submitted'
             else:
                 flag_submission = Submission(challenge = challenge, user = user_profile, correct = True)
@@ -41,6 +41,8 @@ def flagsubmit(request):
                 Profile.objects.filter(user = request.user).update(score = new_score)
                 response = 'Correct'
         else:
+            flag_submission = Submission(challenge = challenge, user = user_profile, correct = False)
+            flag_submission.save()
             response = 'Incorrect'
     else:
         response = 'Invalid Request'
@@ -51,4 +53,6 @@ def get_challenge_submissions():
     result = {}
     for challenge in challenges:
         result[challenge] = challenge.solves.all()
+        print(challenge.solves.all())
+        print(challenge.solves.filter(correct=True))
     return result
