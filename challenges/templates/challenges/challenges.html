@@ -124,7 +124,7 @@
                             <tbody id="challenge-solves-names">
                               {% for submission in challenge.solves.all|correct_solves %}
                               <tr>
-                                <td>{{ submission.user.user.username }}</td>
+                                <td><a href="{% url 'profile-view' submission.user.user.username %}">{{ submission.user.user.username }}</a></td>
                                 <td>{{ submission.timestamp|date:'Y-m-d H:i' }}</td>
                               </tr>
                               {% endfor %}

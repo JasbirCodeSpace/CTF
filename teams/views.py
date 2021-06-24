@@ -45,13 +45,8 @@ def team_join(request):
     return render(request, 'teams/team-join.html', {'form':form}) 
 
 @login_required
-def team_view(request):
-    id = request.GET.get('id', None)
-    if id is None:
-        if not request.user.profile.team:
-            return redirect('team-create')
-        id = request.user.profile.team.id
-    team = Team.objects.get(id = id)
+def team_view(request, teamname):
+    team = Team.objects.get(team_name = teamname)
     if not team:
         return render(request, 'teams/team-create.html')
     

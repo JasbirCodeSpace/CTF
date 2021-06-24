@@ -31,7 +31,7 @@
                             {% for member in members %}
                                 <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td>{{member.user.username}}</td>
+                                <td><a href="{% url 'profile-view' member.user.username %}">{{member.user.username}}</a></td>
                                 <td>{{member.score}}</td>
                                 </tr>
                             {% endfor %}
@@ -44,11 +44,11 @@
         <div class="row">
           <div class="col-sm-6">
               <h5 class="display-5 text-center">Solve Percentage</h5>
-            <canvas id="solves-pie-chart"   data-url="{% url 'team-solves-pie-chart' %}"></canvas>
+            <canvas id="solves-pie-chart"   data-url="{% url 'team-solves-pie-chart' team.team_name %}"></canvas>
           </div>
           <div class="col-sm-6">
             <h5 class="display-5 text-center">Category Breakdown</h5>
-            <canvas id="category-pie-chart"   data-url="{% url 'team-category-pie-chart' %}"></canvas>
+            <canvas id="category-pie-chart"   data-url="{% url 'team-category-pie-chart' team.team_name %}"></canvas>
           </div>
         </div>
         </div>

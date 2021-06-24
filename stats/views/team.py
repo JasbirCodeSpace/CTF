@@ -6,12 +6,8 @@ from django.contrib.auth.models import User
 from teams.models import Team
 
 @login_required
-def solves_pie_chart(request):
-    id = request.GET.get('id', None)
-    if id is None:
-        id = request.user.profile.team.id
-    
-    team = Team.objects.get(id = id)
+def solves_pie_chart(request, teamname):
+    team = Team.objects.get(team_name = teamname)
     if not team:
         return JsonResponse(data={'labels': [], 'data': []})
 
@@ -29,12 +25,8 @@ def solves_pie_chart(request):
     return JsonResponse(data={'labels': labels, 'data': data})
 
 @login_required
-def category_pie_chart(request):
-    id = request.GET.get('id', None)
-    if id is None:
-        id = request.user.profile.team.id
-    
-    team = Team.objects.get(id = id)
+def category_pie_chart(request, teamname):
+    team = Team.objects.get(team_name = teamname)
     if not team:
         return JsonResponse(data={'labels': [], 'data': []})
     labels = []

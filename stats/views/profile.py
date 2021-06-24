@@ -5,11 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 @login_required
-def solves_pie_chart(request):
-    id = request.GET.get('id', None)
-    if id is None:
-        id = request.user.id
-    user = User.objects.get(id=id)
+def solves_pie_chart(request, username):
+    user = User.objects.get(username=username)
+
     labels = ['correct', 'wrong']
     data = []
     correct = user.profile.submissions.filter(correct=True).count()
@@ -20,11 +18,8 @@ def solves_pie_chart(request):
     return JsonResponse(data={'labels': labels, 'data': data})
 
 @login_required
-def category_pie_chart(request):
-    id = request.GET.get('id', None)
-    if id is None:
-        id = request.user.id
-    user = User.objects.get(id=id)
+def category_pie_chart(request, username):
+    user = User.objects.get(username=username)
     labels = []
     data = []
     solves = user.profile.submissions.filter(correct=True)
