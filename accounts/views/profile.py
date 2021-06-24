@@ -72,11 +72,8 @@ def profile_login(request):
     return render(request, 'accounts/profile-login.html', {'form':form})
     
 @login_required
-def profile_view(request):
-    id = request.GET.get('id', None)
-    if id is None:
-        id = request.user.id
-    user = User.objects.get(id=id)
+def profile_view(request, username):
+    user = User.objects.get(username=username)
     team = user.profile.team
     if not team:
         team = "None"
@@ -85,4 +82,4 @@ def profile_view(request):
     score = user.profile.score
     solves = user.profile.submissions.filter(correct=True)
 
-    return render(request, 'accounts/profile.html', {'team':team, 'score': score, 'solves': solves})
+    return render(request, 'accounts/profile.html', {'user':user, 'team':team, 'score': score, 'solves': solves})

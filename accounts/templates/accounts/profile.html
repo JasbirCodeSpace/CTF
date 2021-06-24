@@ -10,7 +10,7 @@
 {% block content %}
 <div class="jumbotron bg-transparent mb-0 pt-3 radius-0">
     <div class="container">
-        <h1 class="display-3 bold color_white content__title text-center">{{request.user.username}}</h1>
+        <h1 class="display-3 bold color_white content__title text-center">{{user.username}}</h1>
         <h5 class="display-5  text-center">Team: <span class="badge badge-primary">{{team}}</span></h5>
         <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
     </div>
@@ -19,11 +19,11 @@
         <div class="row">
           <div class="col-sm-6">
               <h5 class="display-5 text-center">Solve Percentage</h5>
-            <canvas id="solves-pie-chart"   data-url="{% url 'profile-solves-pie-chart' %}"></canvas>
+            <canvas id="solves-pie-chart"   data-url="{% url 'profile-solves-pie-chart' user.username %}"></canvas>
           </div>
           <div class="col-sm-6">
             <h5 class="display-5 text-center">Category Breakdown</h5>
-            <canvas id="category-pie-chart"   data-url="{% url 'profile-category-pie-chart' %}"></canvas>
+            <canvas id="category-pie-chart"   data-url="{% url 'profile-category-pie-chart' user.username %}"></canvas>
           </div>
         </div>
         </div>

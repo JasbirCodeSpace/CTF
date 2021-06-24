@@ -60,3 +60,11 @@ class UserSetPasswordForm(SetPasswordForm):
     
     new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Enter password'}))
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Retype password'}))
+
+class UserPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(UserPasswordChangeForm, self).__init__(*args, **kwargs)
+
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Old password'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'New password'}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Retype new password'}))
