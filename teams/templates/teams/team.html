@@ -8,11 +8,29 @@
 {% endblock css %}
 
 {% block content %}
+
 <div class="jumbotron bg-transparent mb-0 pt-3 radius-0">
-    <div class="container">
+    <div class="container ">
         <h1 class="display-3 bold color_white content__title text-center">{{team.team_name}}</h1>
         <h5 class="display-5  text-center">Members: <span class="badge badge-primary">{{members|length}}</span></h5>
         <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
+        {% if request.user == team.team_leader %}
+            <div class="pt-3 d-flex flex-row justify-content-center align-items-center">
+                <a id="team-update" data-togal="modal" data-url="{% url 'team-update' team.pk %}" data-target="#team-update-modal">
+                    <i class="btn-fa fas fa-cogs fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Edit Team"></i>
+                </a>
+                <a id="team-captain" data-togal="modal" data-url="{% url 'team-captain' team.pk %}" data-target="#team-captain-modal">
+                    <i class="btn-fa fas fa-user-tag fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Choose Captain"></i>
+                </a>
+                <a class="invite-members" data-toggle="modal" data-target="#invite-members-modal">
+                    <i class="btn-fa fas fa-ticket-alt fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Invite Users"></i>
+                </a>
+                <a id="team-delete" data-togal="modal" data-url="{% url 'team-delete' team.pk %}" data-target="#team-delete-modal">
+                    <i class="btn-fa fas fa-trash-alt fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Disband Team"></i>
+                </a>
+
+            </div>
+        {% endif %}
     </div>
     <div class="container">
         <div class="members-table my-5">
@@ -31,7 +49,12 @@
                             {% for member in members %}
                                 <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td><a href="{% url 'profile-view' member.user.username %}">{{member.user.username}}</a></td>
+                                <td>
+                                    <a href="{% url 'profile-view' member.user.username %}" class="text-decoration-none text-white">{{member.user.username}}</a>
+                                    {% if member.user == team.team_leader %}
+                                    <span class="badge badge-primary">Captain</span>
+                                    {% endif %}
+                                </td>
                                 <td>{{member.score}}</td>
                                 </tr>
                             {% endfor %}
@@ -85,6 +108,50 @@
     
 
 </div>
+
+<div id="team-update-modal-outer-div">
+
+</div>
+<div id="team-captain-modal-outer-div">
+
+</div>
+<div id="team-delete-modal-outer-div">
+
+</div>
+<!-- invite member model -->
+<div class="modal fade" id="invite-members-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Invite Users</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST">
+                    <div class="form-group">
+                        <b><label for="link">Invite Link</label></b>
+                        <div class="input-group mb-3">
+                        <input class="form-control" id="team-invite-link" name="link" type="url" value="" disabled>
+                        <div class="input-group-append">
+                        <button id="team-invite-link-copy" class="btn btn-outline-secondary" type="button">
+                        <i class="fas fa-clipboard"></i>
+                        </button>
+                        </div>
+                        </div>
+                        <small class="form-text text-muted">
+                        Share this link with your team members for them to join your team
+                        </small>
+                    </div>
+                </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
 {% block js %}
     {{ block.super }}
@@ -139,5 +206,40 @@
                 drawPieChart('category-pie-chart', data.labels, data.data)
             }
         });
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();  
+
+            $('#team-update').on('click',function(){
+                $.ajax({
+                    url : $(this).attr('data-url'),
+                    method:'GET',
+                    success:function(data){
+                        $('#team-update-modal-outer-div').html(data)
+			            $('#team-update-modal').modal()
+                    }
+                });
+            });
+            $('#team-captain').on('click',function(){
+                $.ajax({
+                    url : $(this).attr('data-url'),
+                    method:'GET',
+                    success:function(data){
+                        $('#team-captain-modal-outer-div').html(data)
+			            $('#team-captain-modal').modal()
+                    }
+                });
+            });
+            $('#team-delete').on('click',function(){
+                $.ajax({
+                    url : $(this).attr('data-url'),
+                    method:'GET',
+                    success:function(data){
+                        $('#team-delete-modal-outer-div').html(data)
+			            $('#team-delete-modal').modal()
+                    }
+                });
+            });
+            
+        })
     </script>
 {% endblock js %}

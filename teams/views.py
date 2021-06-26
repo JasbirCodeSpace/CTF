@@ -1,8 +1,21 @@
+from django.contrib.auth.models import User
+from teams.forms.team import TeamCaptainForm, TeamModelForm
 from accounts.models.profile import Profile
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
 from teams.forms import TeamRegister, TeamJoin
 from teams.models import Team
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.http import require_http_methods
+from teams.checks import is_team_captain
+from django.contrib import messages
+from django.views.generic.edit import DeleteView
+from bootstrap_modal_forms.generic import (
+  BSModalCreateView,
+  BSModalUpdateView,
+  BSModalReadView,
+  BSModalDeleteView
+)
 
 @login_required(login_url='profile-login')
 def team_create(request):
@@ -76,3 +89,59 @@ def get_team_stats(team):
         submissions.append(submission)
     
     return users,submissions, team_score
+
+# class TeamUpdateView(BSModalUpdateView):
+#     model = Team
+#     template_name = 'teams/team-update.html'
+#     form_class = TeamModelForm
+#     success_message = 'Success: Team details updated successfully'
+#     def get_success_url(self):
+#         return reverse('team-view', args=[self.object.team_name])
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def team_update(request, pk):
+    if not is_team_captain(request.user, pk):
+        raise PermissionDenied()
+    team = get_object_or_404(Team, pk=pk)
+    if request.method == "POST":
+        form = TeamModelForm(instance = team, data = request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(team)
+        return redirect(team)
+    else:
+        form = TeamModelForm(instance=team)
+        return render(request, 'teams/modals/team-update.html', {'form': form, 'instance': team})
+    
+    
+@require_http_methods(["GET", "POST"])
+@login_required
+def team_captain_change(request, pk):
+    if not is_team_captain(request.user, pk):
+        raise PermissionDenied()
+    team = get_object_or_404(Team, pk=pk)
+    if request.method == "POST":
+        form = TeamCaptainForm(request.POST)
+        if form.is_valid():
+            captain = form.cleaned_data.get('team_captain')
+            profile = get_object_or_404(Profile, user = User.objects.get(username=captain))
+            if profile in team.users.all():
+                Team.objects.filter(id=pk).update(team_leader=profile.user)
+            return redirect(team)
+        return redirect(team)
+    else:
+        form = TeamCaptainForm(team_id=pk, initial={'team_captain': team.team_leader.id})
+        return render(request, 'teams/modals/team-captain.html', {'form': form, 'instance': team})
+    
+@login_required
+def team_delete(request, pk):
+    if not is_team_captain(request.user, pk):
+        raise PermissionDenied()
+    team = get_object_or_404(Team, pk=pk)
+
+    if request.method == 'POST':
+        print('here')
+        team.delete()
+        return redirect('challenges')
+    return render(request, 'teams/modals/team-delete.html', {'instance': team})

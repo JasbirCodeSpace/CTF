@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 class Team(models.Model):
     team_name = models.CharField(max_length=50, unique=True)
@@ -17,3 +18,7 @@ class Team(models.Model):
 
     def __str__(self):
         return "Team[ "+self.team_name+" ]"
+    
+    def get_absolute_url(self):
+        return reverse("team-view", kwargs={"teamname": self.team_name})
+    
