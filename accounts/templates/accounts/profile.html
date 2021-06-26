@@ -5,13 +5,20 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <style>
+    body{
+        /* background-image: url("{% static 'images/mask-repeated.jpg' %}");
+        background-size: cover;
+        background-repeat: repeat; */
+      }
+    </style>
 {% endblock css %}
 
 {% block content %}
 <div class="jumbotron bg-transparent mb-0 pt-3 radius-0">
     <div class="container">
         <h1 class="display-3 bold color_white content__title text-center">{{user.username}}</h1>
-        <h5 class="display-5  text-center">Team: <span class="badge badge-primary">{{team}}</span></h5>
+        <h5 class="display-5  text-center">Team: <a class="text-white text-decoration-none" href="{% url 'team-view' team %}"><span class="badge badge-primary">{{team}}</span></a></h5>
         <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
     </div>
     <div class="container">

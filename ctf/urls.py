@@ -24,3 +24,6 @@ urlpatterns = [
     path('stats/', include('stats.urls')),
     path('', include('home.urls')),
 ]
+# error handlers
+handler404 = 'home.views.error.handler404'
+handler500 = 'home.views.error.handler500'

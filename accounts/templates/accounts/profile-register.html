@@ -4,7 +4,14 @@
 {% block css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <style>
+        body{
+            background-image: url("{% static 'images/neon-mask-guy.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
 {% endblock css %}
 
 {% block content %}
@@ -86,7 +93,7 @@
         </div>
         <div class="row">
             <div class="col-xl-12 text-center">
-                <button class="btn btn-outline-danger btn-shadow px-3 my-2 ml-0 ml-sm-1 text-left typewriter" type="submit">
+                <button class="btn btn-danger btn-shadow px-3 my-2 ml-0 ml-sm-1 text-left typewriter" type="submit">
                         <h4>Register</h4>
                 </button>
             </div>

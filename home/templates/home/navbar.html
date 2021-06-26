@@ -4,7 +4,9 @@
 {% url 'profile-register' as register_url %}
 {% url 'profile-login' as login_url %}
 {% url 'profile-logout' as logout_url %}
-
+{% url 'profile-view' request.user.username as profile_url %}
+{% url 'team-view' request.user.profile.team.team_name as team_url %}
+{% url 'challenges' as challenges_url %}
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
     <div class="container mt-4">
 
@@ -39,6 +41,17 @@
                 <a class="nav-link p-3 text-decoration-none {% if request.path == hackerboard_url %} text-white {% else %} text-light {% endif %} bold" href="{{ hackerboard_url }}">Hackerboard</a>
             </li>
             {% if request.user.is_authenticated %}
+            <li class="nav-item {% if request.path == challenges_url %} active {% endif %}">
+              <a class="nav-link p-3 text-decoration-none {% if request.path == challenges_url %} text-white {% else %} text-light {% endif %} bold" href="{{ challenges_url }}">Challenges</a>
+            </li>
+            <li class="nav-item {% if request.path == profile_url %} active {% endif %}">
+              <a class="nav-link p-3 text-decoration-none {% if request.path == profile_url %} text-white {% else %} text-light {% endif %} bold" href="{{ profile_url }}">Profile</a>
+            </li>
+              {% if request.user.profile.team.team_name %}
+                <li class="nav-item {% if request.path == team_url %} active {% endif %}">
+                  <a class="nav-link p-3 text-decoration-none {% if request.path == team_url %} text-white {% else %} text-light {% endif %} bold" href="{{ team_url }}">Team</a>
+                </li>
+              {% endif %}
             <li class="nav-item">
               <a class="nav-link p-3 text-decoration-none text-light bold" href="{{ logout_url }}">Logout</a>
             </li>

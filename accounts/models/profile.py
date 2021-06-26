@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
 
 class Profile(models.Model):
     GENDER_CHOICES = (
@@ -36,6 +37,9 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
 	    instance.profile.save()
+    
+    def get_absolute_url(self):
+        return reverse("profile-view", kwargs={"username": self.user.username})
         
 
         

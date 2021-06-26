@@ -3,9 +3,15 @@
 {% load challenge_filters %}
 {% block css %}
     {{ block.super }}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/challenges.css' %}">
+    <style>
+      body{
+        background-image: url("{% static 'images/anonymus-guy-blue-eyes.jpg' %}");
+        background-size: cover;
+        background-repeat: repeat;
+      }
+    </style>
 {% endblock css %}
 
 {% block content %}
@@ -124,7 +130,7 @@
                             <tbody id="challenge-solves-names">
                               {% for submission in challenge.solves.all|correct_solves %}
                               <tr>
-                                <td><a href="{% url 'profile-view' submission.user.user.username %}">{{ submission.user.user.username }}</a></td>
+                                <td><a href="{% url 'profile-view' submission.user.user.username %}" class="text-decoration-none text-white">{{ submission.user.user.username }}</a></td>
                                 <td>{{ submission.timestamp|date:'Y-m-d H:i' }}</td>
                               </tr>
                               {% endfor %}

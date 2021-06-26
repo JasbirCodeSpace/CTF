@@ -1,0 +1,22 @@
+{% extends 'home/main.html' %}
+{% load static %}
+
+{% block css %}
+	{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
+	<style>
+		body{
+			/* background-image: url("{% static 'images/team.jpg' %}"); */
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+	</style>
+{% endblock css %}
+
+{% block content %}
+{% endblock content %}
+
+
+{% block js %}
+	{{ block.super }}
+{% endblock js %}
