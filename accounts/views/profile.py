@@ -76,7 +76,7 @@ def profile_view(request, username):
     user = User.objects.get(username=username)
     team = user.profile.team
     if not team:
-        team = "None"
+        team = None
     else:
         team = team.team_name
     score = user.profile.score

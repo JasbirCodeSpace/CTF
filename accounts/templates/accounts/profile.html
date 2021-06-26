@@ -18,7 +18,9 @@
 <div class="jumbotron bg-transparent mb-0 pt-3 radius-0">
     <div class="container">
         <h1 class="display-3 bold color_white content__title text-center">{{user.username}}</h1>
+        {% if team %}
         <h5 class="display-5  text-center">Team: <a class="text-white text-decoration-none" href="{% url 'team-view' team %}"><span class="badge badge-primary">{{team}}</span></a></h5>
+        {% endif %}
         <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
     </div>
     <div class="container">

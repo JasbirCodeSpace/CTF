@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.http.response import HttpResponse
 from teams.forms.team import TeamCaptainForm, TeamModelForm
 from accounts.models.profile import Profile
 from django.shortcuts import get_object_or_404, render, redirect
@@ -10,6 +11,7 @@ from django.views.decorators.http import require_http_methods
 from teams.checks import is_team_captain
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
+from django.contrib.auth.hashers import check_password, make_password
 from bootstrap_modal_forms.generic import (
   BSModalCreateView,
   BSModalUpdateView,
@@ -60,12 +62,15 @@ def team_join(request):
 @login_required
 def team_view(request, teamname):
     team = Team.objects.get(team_name = teamname)
+    invitation_code = None
+    if request.user == team.team_leader:
+        invitation_code=make_password(team.password)
     if not team:
         return render(request, 'teams/team-create.html')
     
     members, submissions, score = get_team_stats(team)
 
-    return render(request, 'teams/team.html', {'team':team, 'score': score, 'members': members, 'submissions': submissions})
+    return render(request, 'teams/team.html', {'team':team, 'score': score, 'members': members, 'submissions': submissions, 'invitation_code': invitation_code})
 
 def get_team_stats(team):
     users = team.users.all()
@@ -141,7 +146,19 @@ def team_delete(request, pk):
     team = get_object_or_404(Team, pk=pk)
 
     if request.method == 'POST':
-        print('here')
         team.delete()
         return redirect('challenges')
     return render(request, 'teams/modals/team-delete.html', {'instance': team})
+
+
+@login_required
+def team_invite(request, teamname):
+    team = get_object_or_404(Team, team_name = teamname)
+    invitation_code = request.GET['code']
+    if check_password(team.password, invitation_code):
+        if request.user.profile.team is not None and request.user.profile.team.team_leader == request.user:
+            raise PermissionDenied()
+        Profile.objects.filter(user=request.user).update(team = team)
+        return redirect(team)
+    else:
+        raise PermissionDenied()

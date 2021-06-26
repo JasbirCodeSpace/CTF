@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -15,6 +16,11 @@ class Team(models.Model):
     class Meta:
         verbose_name = "Team"
         verbose_name_plural = "Teams"
+
+    def clean(self):
+        if hasattr(self, 'team_leader'):
+            if self.team_leader.profile.team is not None:
+                raise ValidationError("User already in some other team")
 
     def __str__(self):
         return "Team[ "+self.team_name+" ]"

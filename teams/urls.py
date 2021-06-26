@@ -7,5 +7,6 @@ urlpatterns = [
     path('view/<str:teamname>/', views.team_view, name='team-view'),
     path('update/<int:pk>', views.team_update, name='team-update'),
     path('capatain/<int:pk>', views.team_captain_change, name='team-captain'),
-    path('delete/<int:pk>', views.team_delete, name='team-delete')
+    path('delete/<int:pk>', views.team_delete, name='team-delete'),
+    path('invite/<str:teamname>/', views.team_invite, name='team-invite'),
 ]
