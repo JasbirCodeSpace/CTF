@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/form.css' %}">
     <style>
         body{
-            background-image: url("{% static 'images/glowing-mask-eyes-with-gun.jpg' %}");
+            background-image: url("{% static 'images/anonymus-guy-blue-eyes.jpg' %}");
             background-size: cover;
             background-repeat: no-repeat;
         }
@@ -47,6 +47,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="text-center bold my-4 m-auto">
+            <a class="alert-light text-primary px-2 py-1" href="{% url 'password_reset' %}">
+                Forgot your password?
+            </a>
         </div>
         <div class="row">
             <div class="col-xl-12 text-center">

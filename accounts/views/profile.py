@@ -1,15 +1,14 @@
 from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.urls import reverse_lazy
 from django.contrib.auth import login, authenticate, logout
-from accounts.forms.profile import RegisterForm, LoginForm
+from accounts.forms.profile import ProfileUpdateForm, RegisterForm, LoginForm
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
-from django.template import Context
 from django.contrib.auth.models import User
+from accounts.models import Profile
+from django.views.generic.edit import UpdateView
 
 def profile_register(request):
     if request.user.is_authenticated:
@@ -83,3 +82,16 @@ def profile_view(request, username):
     solves = user.profile.submissions.filter(correct=True)
 
     return render(request, 'accounts/profile.html', {'user':user, 'team':team, 'score': score, 'solves': solves})
+
+
+@login_required
+def profile_update(request):
+    profile = request.user.profile
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect(request.user.profile)
+    if request.method == 'GET':
+        form = ProfileUpdateForm(instance=profile)
+    return render(request, 'accounts/profile-update.html', {'form': form})

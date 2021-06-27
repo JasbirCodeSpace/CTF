@@ -36,6 +36,19 @@ class RegisterForm(UserCreationForm):
     def clean(self):
         cleaned_data = super(RegisterForm, self).clean()
         return cleaned_data
+class ProfileUpdateForm(forms.ModelForm):
+    
+    class Meta:
+        model = Profile
+        exclude = ('user','team', 'score',)
+        widgets = {
+            'name':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Full name'}),
+            'email':forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Email'}),
+            'age':forms.NumberInput(attrs={'class':'form-control', 'placeholder':'Age'}),
+            'gender':forms.Select(attrs={'class':'form-control', 'placeholder':'Gender'}),
+            'state':forms.TextInput(attrs={'class':'form-control', 'placeholder':'State'}),
+            'country':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Country'}),
+        }
 
 class LoginForm(AuthenticationForm):
     username=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Username'}),required=True, help_text="Enter username")
@@ -68,3 +81,4 @@ class UserPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Old password'}))
     new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'New password'}))
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Retype new password'}))
+

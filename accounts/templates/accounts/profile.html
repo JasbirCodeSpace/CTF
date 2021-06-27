@@ -6,11 +6,16 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <style>
-    body{
-        /* background-image: url("{% static 'images/mask-repeated.jpg' %}");
-        background-size: cover;
-        background-repeat: repeat; */
-      }
+        body{
+            /* background-image: url("{% static 'images/mask-repeated.jpg' %}");
+            background-size: cover;
+            background-repeat: repeat; */
+        }
+        .setting-link, .setting-link:hover{
+            color: inherit;
+            text-decoration: none;
+        }
+        
     </style>
 {% endblock css %}
 
@@ -22,6 +27,16 @@
         <h5 class="display-5  text-center">Team: <a class="text-white text-decoration-none" href="{% url 'team-view' team %}"><span class="badge badge-primary">{{team}}</span></a></h5>
         {% endif %}
         <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
+        {% if request.user == user %}
+            <div class="pt-3 d-flex flex-row justify-content-center align-items-center">
+                <a class="setting-link" href="{% url 'profile-update' %}">
+                    <i class="btn-fa fas fa-user-tag fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Update profile"></i>
+                </a>
+                <a class="setting-link" href="{% url 'password_change' %}">
+                    <i class="btn-fa fas fa-cogs fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Change password"></i>
+                </a>
+            </div>
+        {% endif %}
     </div>
     <div class="container">
         <div class="charts my-5">
@@ -122,6 +137,10 @@
             success: function (data) {
                 drawPieChart('category-pie-chart', data.labels, data.data)
             }
+            
+        });
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 {% endblock js %}
