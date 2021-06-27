@@ -8,7 +8,7 @@ from teams.forms import TeamRegister, TeamJoin
 from teams.models import Team
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.http import require_http_methods
-from teams.checks import is_team_captain
+from teams.checks import is_team_captain, is_team_member
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.hashers import check_password, make_password
@@ -150,6 +150,16 @@ def team_delete(request, pk):
         return redirect('challenges')
     return render(request, 'teams/modals/team-delete.html', {'instance': team})
 
+@login_required
+def team_leave(request, pk):
+    if not is_team_member(request.user, pk):
+        raise PermissionDenied()
+    team = get_object_or_404(Team, pk=pk)
+
+    if request.method == 'POST':
+        Profile.objects.filter(user=request.user).update(team=None)
+        return redirect(request.user.profile)
+    return render(request, 'teams/modals/team-leave.html', {'instance': team})
 
 @login_required
 def team_invite(request, teamname):
@@ -162,3 +172,11 @@ def team_invite(request, teamname):
         return redirect(team)
     else:
         raise PermissionDenied()
+
+@login_required
+def team_choice(request):
+    if request.user.profile.team is None:
+        return render(request, 'teams/team-choice.html')
+    else:
+        return redirect(request.user.profile.team)
+

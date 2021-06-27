@@ -9,4 +9,6 @@ urlpatterns = [
     path('capatain/<int:pk>', views.team_captain_change, name='team-captain'),
     path('delete/<int:pk>', views.team_delete, name='team-delete'),
     path('invite/<str:teamname>/', views.team_invite, name='team-invite'),
+    path('choice/', views.team_choice, name='team-choice'),
+    path('leave/<int:pk>', views.team_leave, name='team-leave'),
 ]

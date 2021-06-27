@@ -30,6 +30,12 @@
                 </a>
 
             </div>
+        {% elif request.user.profile.team == team %}
+        <div class="pt-3 d-flex flex-row justify-content-center align-items-center">
+            <a id="team-leave" data-togal="modal" data-url="{% url 'team-leave' team.pk %}" data-target="#team-leave-modal">
+                <i class="btn-fa fas fa-sign-out-alt fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Leave Team"></i>
+            </a>
+        </div>
         {% endif %}
     </div>
     <div class="container">
@@ -116,6 +122,9 @@
 
 </div>
 <div id="team-delete-modal-outer-div">
+
+</div>
+<div id="team-leave-modal-outer-div">
 
 </div>
 {% if request.user == team.team_leader %}
@@ -240,6 +249,17 @@
                     success:function(data){
                         $('#team-delete-modal-outer-div').html(data)
 			            $('#team-delete-modal').modal()
+                    }
+                });
+            });
+            $('#team-leave').on('click',function(){
+                $.ajax({
+                    url : $(this).attr('data-url'),
+                    method:'GET',
+                    success:function(data){
+                        console.log(data)
+                        $('#team-leave-modal-outer-div').html(data)
+			            $('#team-leave-modal').modal()
                     }
                 });
             });
