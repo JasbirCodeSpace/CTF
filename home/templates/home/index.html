@@ -7,11 +7,6 @@
 {% endblock css %}
 
 {% block content %}
-		<div style="visibility:hidden">
-			<audio controls autoplay hidden>
-				<source src="{% static 'audio/siren.mp3' %}" type="audio/mpeg">
-			</audio>
-		</div>
 		<main>
 			<div class="content">
 				<div class="glitch">
@@ -24,9 +19,20 @@
 				<h2 class="content__title">ctb</h2>
 			</div>
 		</main>
+		<div style="visibility:hidden">
+			<audio controls autoplay hidden id='audio'>
+				<source src="{% static 'audio/siren.mp3' %}" type="audio/mpeg">
+			</audio>
+		</div>
 {% endblock content %}
 
 {% block js %}
 	{{ block.super }}
-
+	<script>
+		$(document).ready(function(){ 
+			document.getElementById("audio").autoplay
+			// $("#audio").prop('muted', true);
+			// $("#audio").get(0).play();
+		});
+	</script>
 {% endblock js %}

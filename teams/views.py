@@ -12,6 +12,8 @@ from teams.checks import is_team_captain, is_team_member
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.hashers import check_password, make_password
+import datetime
+
 from bootstrap_modal_forms.generic import (
   BSModalCreateView,
   BSModalUpdateView,
@@ -64,7 +66,8 @@ def team_view(request, teamname):
     team = Team.objects.get(team_name = teamname)
     invitation_code = None
     if request.user == team.team_leader:
-        invitation_code=make_password(team.password)
+        salt = str(datetime.date.today())
+        invitation_code=make_password(password=team.password, salt=salt)
     if not team:
         return render(request, 'teams/team-create.html')
     
@@ -171,6 +174,7 @@ def team_invite(request, teamname):
         Profile.objects.filter(user=request.user).update(team = team)
         return redirect(team)
     else:
+        print('here')
         raise PermissionDenied()
 
 @login_required

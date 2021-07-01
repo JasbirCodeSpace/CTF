@@ -7,6 +7,7 @@
 {% url 'profile-view' request.user.username as profile_url %}
 {% url 'team-view' request.user.profile.team.team_name as team_url %}
 {% url 'challenges' as challenges_url %}
+{% url 'team-choice' as team_choice_url %}
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
     <div class="container mt-4">
 
@@ -51,6 +52,10 @@
                 <li class="nav-item {% if request.path == team_url %} active {% endif %}">
                   <a class="nav-link p-3 text-decoration-none {% if request.path == team_url %} text-white {% else %} text-light {% endif %} bold" href="{{ team_url }}">Team</a>
                 </li>
+              {% else %}
+              <li class="nav-item {% if request.path == team_choice_url %} active {% endif %}">
+                <a class="nav-link p-3 text-decoration-none {% if request.path == team_choice_url %} text-white {% else %} text-light {% endif %} bold" href="{{ team_choice_url }}">Team</a>
+              </li>
               {% endif %}
             <li class="nav-item">
               <a class="nav-link p-3 text-decoration-none text-light bold" href="{{ logout_url }}">Logout</a>
