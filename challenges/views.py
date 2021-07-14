@@ -10,15 +10,19 @@ from django.http import HttpResponse, JsonResponse
 
 @login_required(login_url='profile-login')
 def challenges(request):
+
     user = User.objects.get(username = request.user.username)
     profile = Profile.objects.get(user = user)
-
+    submissions =  Submission.objects.filter(user = profile, correct = True)
+    solves = set()
+    for submission in submissions:
+        solves.add(submission.challenge)
     challenges = {}
     categories = ['WEB', 'FORENSIC', 'CRYPTO', 'REV', 'MISC']
     for category in categories:
-        challenges[category] = Challenge.objects.filter(category__name=category)
+        challenges[category] = Challenge.objects.filter(category__name=category).order_by('score')
 
-    return render(request, 'challenges/challenges.html', {'profile':profile, 'categories': challenges})
+    return render(request, 'challenges/challenges.html', {'profile':profile, 'categories': challenges, 'submissions': solves})
 
 @login_required(login_url='profile-login')
 def flagsubmit(request):

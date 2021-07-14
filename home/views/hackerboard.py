@@ -5,7 +5,7 @@ from django.db.models import Count, Max
 
 def hackerboard(request):
     set_team_scores()
-    teams = Team.objects.raw("SELECT id FROM teams_team GROUP BY college_name ORDER BY score DESC LIMIT 1")
+    teams = Team.objects.raw("SELECT id FROM (SELECT * FROM teams_team ORDER BY college_name, score DESC) x GROUP BY college_name ORDER BY score DESC")
     result = []
     for team in teams:
         t = {}

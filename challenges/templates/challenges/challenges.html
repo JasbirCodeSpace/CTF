@@ -42,6 +42,9 @@
                         <div class="my-2">
                             <span class="badge">{{ challenge.score }} points</span>
                             <span class="badge align-self-end">{{ challenge.difficulty|difficulty }}</span>
+                            {% if challenge in submissions %}
+                            <span class="badge badge-success align-self-end">solved</span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -94,6 +97,9 @@
                         <span class="badge align-self-end">{{ challenge.category }}</span>
                         <span class="badge align-self-end">{{ challenge.score }} points</span>
                         <span class="badge align-self-end">{{ challenge.difficulty|difficulty }}</span>
+                        {% if challenge in submissions %}
+                        <span class="badge badge-success align-self-end">solved</span>
+                        {% endif %}
                       </div>
                       
                       <div class="row m-2">
