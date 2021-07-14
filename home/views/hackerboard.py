@@ -1,12 +1,15 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from teams.models import Team
+from django.db.models import Count, Max
 
 def hackerboard(request):
-    teams = Team.objects.all()
+    set_team_scores()
+    teams = Team.objects.raw("SELECT id FROM teams_team GROUP BY college_name ORDER BY score DESC LIMIT 1")
     result = []
     for team in teams:
         t = {}
+        t['college'] = team.college_name
         t['name'] = team.team_name
         t['solves'], t['score'] = get_team_stats(team)
         result.append(t)
@@ -29,3 +32,9 @@ def get_team_stats(team):
         team_score += challenge.score
     
     return num_solved, team_score
+
+def set_team_scores():
+    teams  = Team.objects.all()
+    for team in teams:
+        _, score = get_team_stats(team)
+        Team.objects.filter(id=team.id).update(score=score)

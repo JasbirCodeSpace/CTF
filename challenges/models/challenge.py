@@ -18,7 +18,7 @@ class Challenge(models.Model):
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     difficulty = models.IntegerField(choices=CHALLENGE_DIFFICULTY)
-    hint = models.TextField()
+    hint = models.TextField(null=True, blank=True)
     score = models.IntegerField()
     file = models.FileField(null=True, blank=True, upload_to=get_upload_path)
     flag = models.CharField(max_length=200)
