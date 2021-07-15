@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse
-from teams.forms.team import TeamCaptainForm, TeamModelForm
+from teams.forms.team import TeamCaptainForm, TeamModelForm, TeamUpdateForm
 from accounts.models.profile import Profile
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -13,13 +13,6 @@ from django.contrib import messages
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.hashers import check_password, make_password
 import datetime
-
-from bootstrap_modal_forms.generic import (
-  BSModalCreateView,
-  BSModalUpdateView,
-  BSModalReadView,
-  BSModalDeleteView
-)
 
 @login_required(login_url='profile-login')
 def team_create(request):
@@ -113,13 +106,12 @@ def team_update(request, pk):
         raise PermissionDenied()
     team = get_object_or_404(Team, pk=pk)
     if request.method == "POST":
-        form = TeamModelForm(instance = team, data = request.POST)
+        form = TeamUpdateForm(request.POST, instance = team)
         if form.is_valid():
             form.save()
-            return redirect(team)
         return redirect(team)
     else:
-        form = TeamModelForm(instance=team)
+        form = TeamUpdateForm(instance=team)
         return render(request, 'teams/modals/team-update.html', {'form': form, 'instance': team})
     
     

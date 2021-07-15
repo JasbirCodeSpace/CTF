@@ -229,6 +229,9 @@
                     success:function(data){
                         $('#team-update-modal-outer-div').html(data)
 			            $('#team-update-modal').modal()
+                    },
+                    error:function(data){
+                        console.log(data)
                     }
                 });
             });

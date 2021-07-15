@@ -19,7 +19,7 @@ class Team(models.Model):
 
     def clean(self):
         if hasattr(self, 'team_leader'):
-            if self.team_leader.profile.team is not None:
+            if self.team_leader.profile.team is not None and self.team_leader.profile.team != self:
                 raise ValidationError("User already in some other team")
 
     def __str__(self):

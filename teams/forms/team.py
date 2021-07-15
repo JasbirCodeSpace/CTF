@@ -55,6 +55,15 @@ class TeamModelForm(forms.ModelForm):
             raise forms.ValidationError("Team with this name already exist")
         return team_name
 
+class TeamUpdateForm(forms.ModelForm):
+    team_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Team name'}), max_length=50, required=True, help_text="Enter team name")
+    college_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'College name'}), max_length=50, required=True, help_text="Enter college name")
+    password = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Team password'}), max_length=50, required=True, help_text="Enter team password")
+
+    class Meta:
+        model = Team
+        fields= ['team_name', 'college_name', 'password']
+
 class TeamCaptainForm(forms.Form):
     team_captain = forms.ModelChoiceField(queryset=User.objects.all(),widget=forms.Select(attrs={'class':'form-control'}),empty_label=None)
     
