@@ -1,0 +1,25 @@
+
+.form-center{
+    margin: 0 auto;
+}
+.content__title {
+	font-size: 10vh;
+	margin: 20vh 0 0 0;
+}
+.vertical-center{
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+  }
+
+@media screen and (max-width: 55em) {
+	.content__title{
+        font-size: 7vh;
+		margin: 10vh 0 0 0;
+	}
+	.fixed-top{
+		position: sticky !important;
+	}
+}
