@@ -1,13 +1,21 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from teams.models import Team
-from django.db.models import Count, Max
+from django.db.models import Subquery, OuterRef, F, Max, Q
+
 
 def hackerboard(request):
     set_team_scores()
-    teams = Team.objects.raw("SELECT * FROM (SELECT * FROM teams_team ORDER BY college_name, score DESC) x GROUP BY college_name ORDER BY score DESC")
+    model_max_set = Team.objects.values('college_name').annotate(max_score=Max('score')).order_by()
+
+    q_statement = Q()
+    for pair in model_max_set:
+        q_statement |= (Q(college_name__exact=pair['college_name']) & Q(score=pair['max_score']))
+
+    model_set = Team.objects.filter(q_statement)
+
     result = []
-    for team in teams:
+    for team in model_set:
         t = {}
         t['college'] = team.college_name
         t['name'] = team.team_name
