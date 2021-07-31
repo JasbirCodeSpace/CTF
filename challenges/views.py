@@ -38,7 +38,7 @@ def flagsubmit(request):
         flag = challenge.flag
         points = challenge.score
         prev_submission = Submission.objects.filter(challenge = challenge, user = user_profile, correct = True)
-        _, _, team_challenges, _ = team_details(team) if team else None
+        _, _, team_challenges, _ = team_details(team) if team else None, None, None, None
 
         if prev_submission.first():
             response = 'Already submitted'
