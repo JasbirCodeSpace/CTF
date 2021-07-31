@@ -4,6 +4,13 @@
 {% block css %}
 	{{ block.super }}
 	<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
+	<style>
+	@media screen and (max-width: 55em) {
+		.fixed-top{
+			position: sticky !important;
+		}
+	}
+	</style>
 {% endblock css %}
 
 {% block content %}
