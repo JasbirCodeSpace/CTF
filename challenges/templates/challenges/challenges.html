@@ -1,0 +1,218 @@
+{% extends 'home/main.html' %}
+{% load static %}
+{% load challenge_filters %}
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/challenges.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/moving-background.css' %}">
+    <style>
+        body{
+            background-image: url('data:image/svg+xml,%3Csvg width="52" height="26" viewBox="0 0 52 26" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.4"%3E%3Cpath d="M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z" /%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+          background-color:#151728;
+          background-size:10%;
+          animation: bgScroll 20s linear infinite;
+          }
+          
+          @keyframes bgScroll {
+            0% {
+              background-position : 0px 0px
+            }
+            100% {
+              background-position : 0px -808px
+            }
+          }
+      nav{
+            background: black;
+            opacity: 0.7;
+        }
+        .card{
+          cursor: pointer;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="jumbotron bg-transparent mb-0 pt-0 radius-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12  text-center">
+                <h1 class="display-1 bold color_white content__title"><span class="color_danger">Battle&nbsp;</span>Field<span class="vim-caret">&nbsp;</span></h1>
+                <p class="text-grey text-spacey hackerFont lead mb-5">
+                    Its time to show the world what you can do!
+
+                </p>
+            </div>
+        </div>
+
+        
+            
+          {% for category, challenges in categories.items %}
+          <h1 class="display-1 bold color_white challenge__title">{{category|category_full_name}}</h1>
+          <div class="row hackerFont mt-5">
+            
+            {% for challenge in challenges %}
+            <div class="col-md-4 mb-3">
+                <div class="card category_{{ challenge.category }}" data-toggle="modal" data-target="#challenge-modal-{{challenge.id}}">
+                    <div class="card-header">
+                        {{ challenge.title }}
+                        <div class="my-2">
+                            <span class="badge">{{ challenge.score }} points</span>
+                            <span class="badge align-self-end">{{ challenge.difficulty|difficulty }}</span>
+                            {% if challenge in submissions %}
+                            <span class="badge badge-success align-self-end">solved</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+          </div>
+            {% endfor %}
+
+        {% for category, challenges in categories.items %}
+        {% for challenge in challenges %}
+          <div class="modal fade" id="challenge-modal-{{ challenge.id }}" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <button type="button" class="close btn-close-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <ul class="nav nav-tabs">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#challenge-{{challenge.id}}">Challenge</a>
+                  </li>
+                  
+                    <li class="nav-item">
+                      <a class="nav-link challenge-solves" data-toggle="tab" href="#solves-{{challenge.id}}">
+                        
+                          {{ challenge.solves.all|correct_solves|length }} Solves
+                        
+                      </a>
+                    </li>
+                  
+                </ul>
+                <div role="tabpanel">
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade active show" id="challenge-{{challenge.id}}">
+                      
+                      <div id="alert-{{ challenge.id }}" class="alert alert-primary alert-dismissible fade show m-2" role="alert" style="display: none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                        </button>
+                        <strong class="alert-text"></strong>
+                      </div>
+                      <h2 class="challenge-name text-center pt-3">
+                        {{ challenge.title }}
+                      </h2>
+                      <h3 class="challenge-value text-center">
+                        {{ challenge.score }}
+                      </h3>
+          
+                      <div class="challenge-tags text-center">
+                        <span class="badge align-self-end">{{ challenge.category }}</span>
+                        <span class="badge align-self-end">{{ challenge.score }} points</span>
+                        <span class="badge align-self-end">{{ challenge.difficulty|difficulty }}</span>
+                        {% if challenge in submissions %}
+                        <span class="badge badge-success align-self-end">solved</span>
+                        {% endif %}
+                      </div>
+                      
+                      <div class="row m-2">
+                        {% autoescape off %}
+                        <p>{{ challenge.description }}</p>
+                        {% endautoescape %}
+                      </div>
+                      <div class="row m-2">
+                        {% if challenge.file %}
+                        <a target="_blank" href="uploads/{{challenge.file}}" class="btn btn-danger btn-shadow"><span class="fa fa-download mr-2"></span>Download</a>
+                        {% endif %}
+                        {% if challenge.hint %}
+                        <a href="#hint_{{ challenge.id }}" data-toggle="modal" data-target="#challenge_hint_{{challenge.id}}" class="btn btn-danger btn-shadow"><span class="far fa-lightbulb mr-2"></span>Hint</a>
+                        {% endif %}
+                      </div>
+                      <div class="row justify-content-center m-2">
+                        <form method="post" id="challenge_id_{{ challenge.id }}_form" action="{% url 'flagsubmit' %}">
+                          {% csrf_token %}
+                          <input name="challenge-id" class="challenge-id" type="hidden" value="{{challenge.id}}">
+                          <div class="input-group mt-3">
+                            <input type="text" name="challenge-flag" class="form-control" placeholder="Enter Flag" aria-label="Enter Flag" aria-describedby="basic-addon2" required>
+                            <div class="input-group-append">
+                                <button id="submit_p3" class="btn btn-outline-secondary btn-shadow" type="submit">Submit</button>
+                            </div>
+                        </div>
+                        </form>
+                      </div>
+          
+                    </div>
+          
+                    <div role="tabpanel" class="tab-pane fade" id="solves-{{challenge.id}}">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <table class="table table-striped text-center">
+                            <thead>
+                            <tr>
+                              <td><b>Name</b>
+                              </td>
+                              <td><b>Date</b>
+                              </td>
+                            </tr>
+                            </thead>
+                            <tbody id="challenge-solves-names">
+                              {% for submission in challenge.solves.all|correct_solves %}
+                              <tr>
+                                <td><a href="{% url 'profile-view' submission.user.user.username %}" class="text-decoration-none text-white">{{ submission.user.user.username }}</a></td>
+                                <td>{{ submission.timestamp|date:'Y-m-d H:i' }}</td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          {% if challenge.hint %}
+          <div class="modal" id="challenge_hint_{{ challenge.id }}" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-top" role="document">
+              <div class="modal-content">
+                  <div class="alert alert-info mb-0" role="alert">
+                    <strong>Hint: </strong>{{ challenge.hint }}
+                  </div>                  
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          
+          <script type="text/javascript">
+            $(document).ready(function (){
+              $("#challenge_id_{{ challenge.id }}_form").submit(function(event) {
+                $.ajax({
+                  type : "POST",
+                  url : "{% url 'flagsubmit' %}",
+                  data : $(this).serialize(),
+                  success : function(response) {
+                    $("#alert-{{challenge.id}} .alert-text").text(response.msg);
+                    $("#alert-{{challenge.id}}").show();
+                    setTimeout(function(){
+                        if ($('#alert-{{challenge.id}}').length > 0) {
+                            $('#alert-{{challenge.id}}').remove();
+                        }
+                    }, 2000) 
+                  }
+                });
+                event.preventDefault();
+              });
+            });
+          </script>
+        {% endfor %}
+      {% endfor %}
+{% endblock content %}
+{% block js %}
+    {{ block.super }}
+{% endblock js %}

@@ -1,0 +1,49 @@
+{% extends 'home/main.html' %}
+{% load static %}
+
+{% block css %}
+	{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
+	<style>
+		.bottom-right{
+			position: fixed; 
+			bottom: 0; 
+			right: 0;
+		}
+		@media screen and (max-width: 55em) {
+			.fixed-top{
+				position: sticky !important;
+			}
+		}
+	</style>
+{% endblock css %}
+
+{% block content %}
+		<main>
+			<div class="content">
+				
+				<div class="glitch">
+					<div class="glitch__img"></div>
+					<div class="glitch__img"></div>
+					<div class="glitch__img"></div>
+					<div class="glitch__img"></div>
+					<div class="glitch__img"></div>
+				</div>
+				<h2 class="content__title">ctb</h2>
+			</div>
+		</main>
+		<div class="bottom-right">
+			<audio controls autoplay loop id='audio'>
+				<source src="{% static 'audio/siren.mp3' %}" type="audio/mpeg">
+			</audio>
+		</div>
+{% endblock content %}
+
+{% block js %}
+	{{ block.super }}
+	<script>
+		$(document).ready(function(){ 
+			document.getElementById("audio").autoplay;
+		});
+	</script>
+{% endblock js %}

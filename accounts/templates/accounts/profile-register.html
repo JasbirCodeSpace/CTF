@@ -1,0 +1,117 @@
+{% extends 'home/main.html' %}
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <style>
+        body{
+            background-image: url("{% static 'images/anonymus-guy-blue-eyes.jpg' %}");
+            /* background-size: cover; */
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+        nav{
+            background: black;
+            opacity: 0.8;
+        }
+        @media screen and (max-width: 55em) {
+            body{
+                background-image: none;
+            }
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="jumbotron bg-transparent mb-0 pt-3 radius-0">
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+        <div class="row">
+            <div class="col-xl-12  form-center">
+                <h1 class="display-1 bold color_white content__title text-center">Register<span class="vim-caret">&nbsp;</span></h1>
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="row  hackerFont mt-5 mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{form.username}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{form.email}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{form.name}}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{form.age}}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{form.gender}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{form.password1}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{form.password2}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{form.state}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{form.country}}
+                        </div>
+                    </div>
+                    <div class="custom-control custom-checkbox my-4 m-auto alert-light px-2 py-1">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                            <label class="custom-control-label text-primary bold" for="customCheck1">I promise I will not play fair and do anything to win the game.</label>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 text-center">
+                <button class="btn btn-danger btn-shadow px-3 my-2 ml-0 ml-sm-1 text-left typewriter" type="submit">
+                        <h4>Register</h4>
+                </button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+{% endblock content %}
+{% block js %}
+    {{ block.super }}
+{% endblock js %}

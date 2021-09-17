@@ -1,0 +1,82 @@
+{% url 'home' as home_url %}
+{% url 'about' as about_url %}
+{% url 'hackerboard' as hackerboard_url %}
+{% url 'profile-register' as register_url %}
+{% url 'profile-login' as login_url %}
+{% url 'profile-logout' as logout_url %}
+{% url 'profile-view' request.user.username as profile_url %}
+{% url 'team-view' request.user.profile.team.team_name as team_url %}
+{% url 'challenges' as challenges_url %}
+{% url 'team-choice' as team_choice_url %}
+{% url 'instructions' as instructions_url %}
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container mt-4">
+
+      <!-- Brand -->
+      <a class="navbar-brand" href="{{ home_url }}" class="">
+        <h3 class="bold"><span class="color_danger">Version' </span><span class="color_white">2K21</span></h3>
+      </a>
+
+      <!-- Collapse -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+            <li class="nav-item {% if request.path == home_url %} active {% endif %}">
+                <a class="nav-link p-3 text-decoration-none {% if request.path == home_url %} text-white {% else %} text-light {% endif %} bold" href="{{ home_url }}">Home</a>
+            </li>
+            <li class="nav-item {% if request.path == about_url %} active {% endif %}">
+                <a class="nav-link p-3 text-decoration-none {% if request.path == about_url %} text-white {% else %} text-light {% endif %} bold" href="{{ about_url }}">About</a>
+            </li>
+            <li class="nav-item {% if request.path == instructions_url %} active {% endif %}">
+              <a class="nav-link p-3 text-decoration-none {% if request.path == instructions_url %} text-white {% else %} text-light {% endif %} bold" href="{{ instructions_url }}">Instructions</a>
+          </li>
+            <li class="nav-item {% if request.path == hackerboard_url %} active {% endif %}">
+                <a class="nav-link p-3 text-decoration-none {% if request.path == hackerboard_url %} text-white {% else %} text-light {% endif %} bold" href="{{ hackerboard_url }}">Hackerboard</a>
+            </li>
+            {% if request.user.is_authenticated %}
+            <li class="nav-item {% if request.path == challenges_url %} active {% endif %}">
+              <a class="nav-link p-3 text-decoration-none {% if request.path == challenges_url %} text-white {% else %} text-light {% endif %} bold" href="{{ challenges_url }}">Challenges</a>
+            </li>
+            <li class="nav-item {% if request.path == profile_url %} active {% endif %}">
+              <a class="nav-link p-3 text-decoration-none {% if request.path == profile_url %} text-white {% else %} text-light {% endif %} bold" href="{{ profile_url }}">Profile</a>
+            </li>
+              {% if request.user.profile.team.team_name %}
+                <li class="nav-item {% if request.path == team_url %} active {% endif %}">
+                  <a class="nav-link p-3 text-decoration-none {% if request.path == team_url %} text-white {% else %} text-light {% endif %} bold" href="{{ team_url }}">Team</a>
+                </li>
+              {% else %}
+              <li class="nav-item {% if request.path == team_choice_url %} active {% endif %}">
+                <a class="nav-link p-3 text-decoration-none {% if request.path == team_choice_url %} text-white {% else %} text-light {% endif %} bold" href="{{ team_choice_url }}">Team</a>
+              </li>
+              {% endif %}
+            <li class="nav-item">
+              <a class="nav-link p-3 text-decoration-none text-light bold" href="{{ logout_url }}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item {% if request.path == register_url %} active {% endif %}">
+              <a class="nav-link p-3 text-decoration-none {% if request.path == register_url %} text-white {% else %} text-light {% endif %} bold" href="{{ register_url }}">Register</a>
+            </li>
+            <li class="nav-item {% if request.path == login_url %} active {% endif %}">
+                <a class="nav-link p-3 text-decoration-none {% if request.path == login_url %} text-white {% else %} text-light {% endif %} bold" href="{{ login_url }}">Login</a>
+            </li>
+            {% endif %}
+        </ul>
+
+      </div>
+
+    </div>
+
+  </nav>
+
