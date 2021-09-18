@@ -13,6 +13,12 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+if 'AWS_ACCESS_KEY_ID' in os.environ:
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+    AWS_S3_REGION_NAME=os.environ['AWS_S3_REGION_NAME']
+    AWS_STORAGE_BUCKET_NAME=os.environ['AWS_STORAGE_BUCKET_NAME']
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
@@ -26,7 +32,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ['DEBUG']=='True')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'ctb-env.eba-tezmwcbz.ap-south-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -44,6 +50,7 @@ INSTALLED_APPS = [
     'challenges',
     'teams',
     'stats',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'CTF.urls'
@@ -80,12 +88,27 @@ WSGI_APPLICATION = 'CTF.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'RDS_HOSTNAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+            #     "OPTION": {
+            #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            # }
+        }
     }
-}
+else: 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -125,8 +148,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = 'static'
+AWS_QUERYSTRING_AUTH = False
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATICFILES_DIRS = [BASE_DIR/'static']
+
+### Django storages - use this for production
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'challenges/uploads/')
+
+### Django storages - use in production
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -134,17 +168,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/challenges/'
 
-MEDIA_ROOT = BASE_DIR/'challenges/uploads/'
-
-MEDIA_URL = '/uploads/'
-
 # email configuration
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST='smtp.gmail.com'
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD=os.environ['EMAIL_HOST_PASSWORD']
+# EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
+# EMAIL_HOST='email-smtp.ap-south-1.amazonaws.com'
+# EMAIL_PORT=465
+# EMAIL_USE_SSL=True
+# EMAIL_HOST_USER=os.environ['AWS_SES_SMTP_USER']
+# EMAIL_HOST_PASSWORD=os.environ['AWS_SES_PASSWORD']
+# DEFAULT_FROM_EMAIL=os.environ['AWS_SES_SENDER_EMAIL_ID']
+
+
+
+
+
 
 # Activate Django-Heroku.
 # django_heroku.settings(locals())
