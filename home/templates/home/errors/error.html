@@ -1,0 +1,40 @@
+{% extends 'home/main.html' %}
+{% load static %}
+
+{% block css %}
+	{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
+	<style>
+		body{
+			background-image: url("{% static 'images/404.jpg' %}");
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center center;
+		}
+		nav{
+			background: #000;
+		}
+		@media screen and (max-width: 55em) {
+
+			.fixed-top{
+				position: sticky !important;
+			}
+		}
+	</style>
+{% endblock css %}
+
+{% block content %}
+	{% if message %}
+		<div class="container">
+			<div class="alert alert-danger">
+				<strong>{{ message|escape }}</strong>
+			</div>
+		</div>
+	{% endif %}
+
+{% endblock content %}
+
+
+{% block js %}
+	{{ block.super }}
+{% endblock js %}

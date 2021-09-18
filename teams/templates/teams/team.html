@@ -1,0 +1,319 @@
+{% extends 'home/main.html' %}
+{% load static %}
+{% load url_tags %}
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/team.css' %}">
+    <style>
+        nav{
+            background: black;
+            opacity: 0.8;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="jumbotron bg-transparent mb-0 pt-3 radius-0">
+    <div class="container ">
+        <h1 class="display-3 bold color_white content__title text-center">{{team.team_name}}</h1>
+        <h5 class="display-5  text-center">Members: <span class="badge badge-primary">{{members|length}}</span></h5>
+        <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
+        {% if request.user == team.team_leader %}
+            <div class="pt-3 d-flex flex-row justify-content-center align-items-center">
+                <a id="team-update" data-togal="modal" data-url="{% url 'team-update' team.pk %}" data-target="#team-update-modal">
+                    <i class="btn-fa fas fa-cogs fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Edit Team"></i>
+                </a>
+                <a id="team-captain" data-togal="modal" data-url="{% url 'team-captain' team.pk %}" data-target="#team-captain-modal">
+                    <i class="btn-fa fas fa-user-tag fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Choose Captain"></i>
+                </a>
+                <a id="team-invite" data-togal="modal" data-url="{% url 'team-invite' team.team_name %}" data-target="#team-invite-modal">
+                    <i class="btn-fa fas fa-ticket-alt fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Invite Users"></i>
+                </a>
+                <a id="team-delete" data-togal="modal" data-url="{% url 'team-delete' team.pk %}" data-target="#team-delete-modal">
+                    <i class="btn-fa fas fa-trash-alt fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Disband Team"></i>
+                </a>
+
+            </div>
+        {% elif request.user.profile.team == team %}
+        <div class="pt-3 d-flex flex-row justify-content-center align-items-center">
+            <a id="team-leave" data-togal="modal" data-url="{% url 'team-leave' team.pk %}" data-target="#team-leave-modal">
+                <i class="btn-fa fas fa-sign-out-alt fa-2x px-2" data-toggle="tooltip" data-placement="bottom" title="Leave Team"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        <div class="members-table my-5">
+            <h3 class="display-5">Members:</h3>
+            <div class="row justify-content-center">
+                <div class="col-xl-12 ">
+                    <table class="table score-col table-hover table-striped table-responsive-sm">
+                        <thead class="thead-dark hackerFont">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in members %}
+                                <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>
+                                    <a href="{% url 'profile-view' member.user.username %}" class="text-decoration-none text-white">{{member.user.username}}</a>
+                                    {% if member.user == team.team_leader %}
+                                    <span class="badge badge-primary">Captain</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{member.score}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        </div>
+        <div class="charts my-5">
+        <div class="row">
+          <div class="col-sm-6">
+              <h5 class="display-5 text-center">Solve Percentage</h5>
+            <canvas id="solves-pie-chart"   data-url="{% url 'team-solves-pie-chart' team.team_name %}"></canvas>
+          </div>
+          <div class="col-sm-6">
+            <h5 class="display-5 text-center">Category Breakdown</h5>
+            <canvas id="category-pie-chart"   data-url="{% url 'team-category-pie-chart' team.team_name %}"></canvas>
+          </div>
+        </div>
+        </div>
+
+        <div class="solves-table my-5">
+            <h3 class="display-5">Submissions:</h3>
+            <div class="row justify-content-center">
+                <div class="col-xl-12 ">
+                    <table class="table score-col table-hover table-striped table-responsive-sm">
+                        <thead class="thead-dark hackerFont">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                                <th>Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for submission in submissions %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{submission.challenge.title}}</td>
+                                <td>{{submission.challenge.score}}</td>
+                                <td>{{submission.timestamp|date:'Y-m-d H:i'}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        </div>
+    </div>
+    
+    
+
+</div>
+
+<div id="team-update-modal-outer-div">
+
+</div>
+<div id="team-captain-modal-outer-div">
+
+</div>
+<div id="team-delete-modal-outer-div">
+
+</div>
+<div id="team-leave-modal-outer-div">
+
+</div>
+{% if request.user == team.team_leader %}
+<div id="team-invite-modal-outer-div">
+    <div class="modal fade" id="team-invite-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Invite Users</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                        <div class="form-group">
+                            <b><label for="link">Invite Link</label></b>
+                            <div class="input-group mb-3">
+                            <input class="form-control" id="team-invite-link" name="link" type="url" value="{% abs_url 'team-invite' team.team_name %}?code={{invitation_code}}" disabled>
+                            <div class="input-group-append">
+                            <button id="team-invite-link-copy" class="btn btn-outline-secondary js-copy" type="button" data-toggle="tooltip" data-placement="bottom" data-copy="{% abs_url 'team-invite' team.team_name %}?code={{invitation_code}}" title="Copy to clipboard">
+                            <i class="fas fa-clipboard"></i>
+                            </button>
+                            </div>
+                            </div>
+                            <small class="form-text text-muted">
+                            Share this link with your team members for them to join your team
+                            </small>
+                        </div>
+                    </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+{% endif %}
+<!-- invite member model -->
+{% endblock content %}
+{% block js %}
+    {{ block.super }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-deferred@1"></script>
+    <script>
+        let solvesChart = $('#solves-pie-chart');
+        let categoryChart = $('#category-pie-chart');
+        Chart.defaults.global.defaultFontSize = 18;
+        Chart.defaults.global.defaultFontColor = '#fff';
+        const drawPieChart = (canvasID, labels, data)=>{
+            var canvas = document.getElementById(canvasID).getContext('2d');
+
+
+            var canvasData = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: data,
+                        backgroundColor: [
+                            "#63FF84",
+                            "#FF6384",
+                            "#84FF63",
+                            "#8463FF",
+                            "#6384FF"
+                        ]
+                    }],
+                    hoverOffset: 4,
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
+                }
+            };
+
+            let pieChart = new Chart(canvas, {
+            type: 'pie',
+            data: canvasData,
+            width:200,
+            height:200,
+            });
+        }
+        $.ajax({
+            url: solvesChart.data("url"),
+            success: function (data) {
+                drawPieChart('solves-pie-chart', data.labels, data.data)
+            }
+        });
+
+        $.ajax({
+            url: categoryChart.data("url"),
+            success: function (data) {
+                drawPieChart('category-pie-chart', data.labels, data.data)
+            }
+        });
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();  
+
+            $('#team-update').on('click',function(){
+                $.ajax({
+                    url : $(this).attr('data-url'),
+                    method:'GET',
+                    success:function(data){
+                        $('#team-update-modal-outer-div').html(data)
+			            $('#team-update-modal').modal()
+                    },
+                    error:function(data){
+                        console.log(data)
+                    }
+                });
+            });
+            $('#team-captain').on('click',function(){
+                $.ajax({
+                    url : $(this).attr('data-url'),
+                    method:'GET',
+                    success:function(data){
+                        $('#team-captain-modal-outer-div').html(data)
+			            $('#team-captain-modal').modal()
+                    }
+                });
+            });
+            $('#team-delete').on('click',function(){
+                $.ajax({
+                    url : $(this).attr('data-url'),
+                    method:'GET',
+                    success:function(data){
+                        $('#team-delete-modal-outer-div').html(data)
+			            $('#team-delete-modal').modal()
+                    }
+                });
+            });
+            $('#team-leave').on('click',function(){
+                $.ajax({
+                    url : $(this).attr('data-url'),
+                    method:'GET',
+                    success:function(data){
+                        console.log(data)
+                        $('#team-leave-modal-outer-div').html(data)
+			            $('#team-leave-modal').modal()
+                    }
+                });
+            });
+            $('#team-invite').on('click',function(){
+			            $('#team-invite-modal').modal()
+            });
+
+
+            function copyToClipboard(text, el) {
+                var copyTest = document.queryCommandSupported('copy');
+                var elOriginalText = el.attr('data-original-title');
+
+                if (copyTest === true) {
+                    var copyTextArea = document.createElement("textarea");
+                    copyTextArea.value = text;
+                    document.body.appendChild(copyTextArea);
+                    copyTextArea.select();
+                    try {
+                        var successful = document.execCommand('copy');
+                        if (navigator.clipboard != undefined) {
+                            navigator.clipboard.writeText(text);
+                        }
+                        else if(window.clipboardData) { // Internet Explorer
+                            window.clipboardData.setData(text);
+                        }
+                        var msg = successful ? 'Copied!' : 'Whoops, not copied!';
+                        el.attr('data-original-title', msg).tooltip('show');
+                    } catch (err) {
+                        console.log(err)
+                        console.log('Oops, unable to copy');
+                    }
+                    document.body.removeChild(copyTextArea);
+                    el.attr('data-original-title', elOriginalText);
+                } else {
+                    // Fallback if browser doesn't support .execCommand('copy')
+                    window.prompt("Copy to clipboard: Ctrl+C or Command+C, Enter", text);
+                }
+                }
+
+            $('.js-copy').click(function() {
+                var text = $(this).attr('data-copy');
+                var el = $(this);
+                copyToClipboard(text, el);
+            });
+            
+        })
+    </script>
+{% endblock js %}
