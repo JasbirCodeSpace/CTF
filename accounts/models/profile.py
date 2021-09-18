@@ -13,11 +13,18 @@ class Profile(models.Model):
         ('O', 'Other'),
         ('N', 'Prefer not to say')
     )
+    YEAR_CHOICES = (
+        (1, 'First Year'),
+        (2, 'Second Year'),
+        (3, 'Third Year')
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=254)
     age = models.IntegerField(null=True)
     gender =models.CharField(choices = GENDER_CHOICES, max_length=50)
+    college=models.CharField(max_length=250)
+    year=models.IntegerField(choices = YEAR_CHOICES)
     score = models.IntegerField(default=0)
     team = models.ForeignKey("teams.Team", blank=True, null=True, on_delete=models.SET_NULL, related_name='users')
     class Meta:
