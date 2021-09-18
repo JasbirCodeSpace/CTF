@@ -1,3 +1,4 @@
+{% load static %}
 {% url 'home' as home_url %}
 {% url 'about' as about_url %}
 {% url 'hackerboard' as hackerboard_url %}
@@ -14,6 +15,7 @@
 
       <!-- Brand -->
       <a class="navbar-brand" href="{{ home_url }}" class="">
+        <img src="{% static 'images/version_logo.png' %}" width="30" height="30" alt="">
         <h3 class="bold"><span class="color_danger">Version' </span><span class="color_white">2K21</span></h3>
       </a>
 

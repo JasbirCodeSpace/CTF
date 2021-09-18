@@ -35,6 +35,9 @@
 	animation-delay: calc(var(--delay-anim) + var(--time-anim) * 0.2);
 }
 
+nav{
+	background-color: rgba(0, 0, 0, 0.8) !important;
+}
 /* Glitch styles */
 .glitch {
 	position: absolute;
