@@ -21,7 +21,7 @@ if 'AWS_ACCESS_KEY_ID' in os.environ:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+# load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -169,17 +169,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/challenges/'
 
 # email configuration
-EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST='email-smtp.ap-south-1.amazonaws.com'
-EMAIL_PORT=465
-EMAIL_USE_SSL=True
-EMAIL_HOST_USER=os.environ['AWS_SES_SMTP_USER']
-EMAIL_HOST_PASSWORD=os.environ['AWS_SES_PASSWORD']
-DEFAULT_FROM_EMAIL=os.environ['AWS_SES_SENDER_EMAIL_ID']
+# EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
+# EMAIL_HOST='email-smtp.ap-south-1.amazonaws.com'
+# EMAIL_PORT=465
+# EMAIL_USE_SSL=True
+# EMAIL_HOST_USER=os.environ['AWS_SES_SMTP_USER']
+# EMAIL_HOST_PASSWORD=os.environ['AWS_SES_PASSWORD']
+# DEFAULT_FROM_EMAIL=os.environ['AWS_SES_SENDER_EMAIL_ID']
 
-
-
-
+# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+# SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = True
 
 
 # Activate Django-Heroku.
