@@ -32,7 +32,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ['DEBUG']=='True')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'ctb-env.eba-tezmwcbz.ap-south-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'ctb-env.eba-kdamt27i.ap-south-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -82,7 +82,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'CTF.wsgi.application'
+WSGI_APPLICATION = 'CTF.wsgi'
 
 
 # Database
@@ -169,13 +169,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/challenges/'
 
 # email configuration
-# EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
-# EMAIL_HOST='email-smtp.ap-south-1.amazonaws.com'
-# EMAIL_PORT=465
-# EMAIL_USE_SSL=True
-# EMAIL_HOST_USER=os.environ['AWS_SES_SMTP_USER']
-# EMAIL_HOST_PASSWORD=os.environ['AWS_SES_PASSWORD']
-# DEFAULT_FROM_EMAIL=os.environ['AWS_SES_SENDER_EMAIL_ID']
+EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST='email-smtp.ap-south-1.amazonaws.com'
+EMAIL_PORT=465
+EMAIL_USE_SSL=True
+EMAIL_HOST_USER=os.environ['AWS_SES_SMTP_USER']
+EMAIL_HOST_PASSWORD=os.environ['AWS_SES_PASSWORD']
+DEFAULT_FROM_EMAIL=os.environ['AWS_SES_SENDER_EMAIL_ID']
 
 
 
