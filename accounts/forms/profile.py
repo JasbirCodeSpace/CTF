@@ -25,7 +25,7 @@ class RegisterForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Email'}),max_length=254, required=True, help_text="Enter your email id")
     age = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control', 'placeholder':'Age'}),required=True, help_text="Enter your age")
     gender =forms.ChoiceField(widget=forms.Select(attrs={'class':'form-control', 'placeholder':'Gender'}),choices=GENDER_CHOICES, required=True)
-    college = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Full College Name'}), max_length= 250, required=True)
+    college = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'College Full Name'}), max_length= 250, required=True)
     year = forms.ChoiceField(widget=forms.Select(attrs={'class':'form-control', 'placeholder':'Year'}), choices=YEAR_CHOICES, required=True)
     # state = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'State'}),max_length=50, required=True, help_text="Enter your state name")
     # country = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Country'}),max_length=50, required=True, help_text="Enter your country name")
@@ -53,8 +53,8 @@ class ProfileUpdateForm(forms.ModelForm):
             'email':forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Email'}),
             'age':forms.NumberInput(attrs={'class':'form-control', 'placeholder':'Age'}),
             'gender':forms.Select(attrs={'class':'form-control', 'placeholder':'Gender'}),
-            'college':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Full College Name'}),
-            'year':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Year'}),
+            'college':forms.TextInput(attrs={'class':'form-control', 'placeholder':'College Full Name'}),
+            'year':forms.Select(attrs={'class':'form-control', 'placeholder':'Year'}),
     
             # 'state':forms.TextInput(attrs={'class':'form-control', 'placeholder':'State'}),
             # 'country':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Country'}),

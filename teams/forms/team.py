@@ -63,6 +63,12 @@ class TeamUpdateForm(forms.ModelForm):
     class Meta:
         model = Team
         fields= ['team_name', 'college_name', 'password']
+    
+    def clean_team_name(self):
+        team_name = self.cleaned_data['team_name']
+        if Team.objects.filter(team_name = team_name).exists():
+            raise forms.ValidationError("Team with this name already exist")
+        return team_name
 
 class TeamCaptainForm(forms.Form):
     team_captain = forms.ModelChoiceField(queryset=User.objects.all(),widget=forms.Select(attrs={'class':'form-control'}),empty_label=None)

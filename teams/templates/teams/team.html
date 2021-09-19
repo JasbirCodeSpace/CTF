@@ -31,6 +31,15 @@
                 </a>
 
             </div>
+            {% if messages %}
+                <div class="row">
+                    {% for message in messages %}
+                        <div class="alert alert-danger col-md-4 mt-2 mx-auto">
+                                <strong>{{ message|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% elif request.user.profile.team == team %}
         <div class="pt-3 d-flex flex-row justify-content-center align-items-center">
             <a id="team-leave" data-togal="modal" data-url="{% url 'team-leave' team.pk %}" data-target="#team-leave-modal">
@@ -45,7 +54,7 @@
             <div class="row justify-content-center">
                 <div class="col-xl-12 ">
                     <table class="table score-col table-hover table-striped table-responsive-sm">
-                        <thead class="thead-dark hackerFont">
+                        <thead class="table-primary hackerFont">
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
@@ -54,7 +63,7 @@
                         </thead>
                         <tbody>
                             {% for member in members %}
-                                <tr>
+                                <tr class="bg-dark">
                                 <td>{{forloop.counter}}</td>
                                 <td>
                                     <a href="{% url 'profile-view' member.user.username %}" class="text-decoration-none text-white">{{member.user.username}}</a>
@@ -88,7 +97,7 @@
             <div class="row justify-content-center">
                 <div class="col-xl-12 ">
                     <table class="table score-col table-hover table-striped table-responsive-sm">
-                        <thead class="thead-dark hackerFont">
+                        <thead class="table-primary hackerFont">
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
@@ -98,7 +107,7 @@
                         </thead>
                         <tbody>
                             {% for submission in submissions %}
-                            <tr>
+                            <tr class="bg-dark">
                                 <td>{{forloop.counter}}</td>
                                 <td>{{submission.challenge.title}}</td>
                                 <td>{{submission.challenge.score}}</td>

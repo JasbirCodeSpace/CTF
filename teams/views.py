@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.hashers import check_password, make_password
 import datetime
+import json
 
 salt = "Y:[zTwN/z-[u2>{b"
 
@@ -108,10 +109,17 @@ def team_update(request, pk):
         raise PermissionDenied()
     team = get_object_or_404(Team, pk=pk)
     if request.method == "POST":
-        form = TeamUpdateForm(request.POST, instance = team)
+        form = TeamUpdateForm(request.POST or None, instance = team)
         if form.is_valid():
             form.save()
-        return redirect(team)
+            return redirect(team)
+        else:
+            list(messages.get_messages(request))
+            form_errors = json.loads(form.errors.as_json())
+            for field in form_errors:
+                for field_error in form_errors[field]:
+                    messages.error(request, field_error['message'])
+            return redirect(request.user.profile.team)
     else:
         form = TeamUpdateForm(instance=team)
         return render(request, 'teams/modals/team-update.html', {'form': form, 'instance': team})

@@ -52,7 +52,7 @@
             <div class="row justify-content-center">
                 <div class="col-xl-12 ">
                     <table class="table score-col table-hover table-striped table-responsive-sm">
-                        <thead class="thead-dark hackerFont">
+                        <thead class="table-primary hackerFont">
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
@@ -62,7 +62,7 @@
                         </thead>
                         <tbody>
                             {% for solve in solves %}
-                            <tr>
+                            <tr class="bg-dark">
                                 <td>{{forloop.counter}}</td>
                                 <td>{{solve.challenge.title}}</td>
                                 <td>{{solve.challenge.score}}</td>
