@@ -33,6 +33,9 @@
     padding-right: 20px;
 }
 
+.category_BLOCKCHAIN {
+	border-top: 4px solid #36a2eb;
+}
 .category_WEB {
     border-top: 4px solid #ef121b94;
 }

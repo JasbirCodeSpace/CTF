@@ -18,7 +18,7 @@ def challenges(request):
     for submission in submissions:
         solves.add(submission.challenge)
     challenges = {}
-    categories = ['WEB', 'FORENSIC', 'CRYPTO', 'REV', 'MISC']
+    categories = ['BLOCKCHAIN', 'WEB', 'FORENSIC', 'CRYPTO', 'REV', 'MISC']
     for category in categories:
         challenges[category] = Challenge.objects.filter(category__name=category).order_by('score')
 

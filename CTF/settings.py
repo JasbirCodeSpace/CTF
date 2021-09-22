@@ -178,8 +178,12 @@ LOGIN_REDIRECT_URL = '/challenges/'
 # DEFAULT_FROM_EMAIL=os.environ['AWS_SES_SENDER_EMAIL_ID']
 
 # EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-# SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST_USER = 'apikey'
+# EMAIL_HOST_PASSWORD  = os.environ["SENDGRID_API_KEY"]
 # SENDGRID_SANDBOX_MODE_IN_DEBUG = True
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
 
 # Activate Django-Heroku.

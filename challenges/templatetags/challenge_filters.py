@@ -14,5 +14,5 @@ def correct_solves(submissions):
 
 @register.filter(name='category_full_name')
 def category_full_name(category):
-    categories = {'WEB':"WEB EXPLOITATION", "FORENSIC":"FORENSIC", "REV":"REVERSE ENGINEERING", "CRYPTO": "CRYPTOGRAPHY", "MISC":"MISCELLANEOUS"}
+    categories = {'WEB':"WEB EXPLOITATION", "FORENSIC":"FORENSIC", "REV":"REVERSE ENGINEERING", "CRYPTO": "CRYPTOGRAPHY", "MISC":"MISCELLANEOUS", "BLOCKCHAIN": "BLOCKCHAIN"}
     return categories[category]
