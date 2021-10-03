@@ -21,7 +21,7 @@ if 'AWS_ACCESS_KEY_ID' in os.environ:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+# load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -32,7 +32,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ['DEBUG']=='True')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'ctb-env.eba-kdamt27i.ap-south-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'ctb-env.eba-uhpi7gbi.ap-south-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -177,13 +177,15 @@ LOGIN_REDIRECT_URL = '/challenges/'
 # EMAIL_HOST_PASSWORD=os.environ['AWS_SES_PASSWORD']
 # DEFAULT_FROM_EMAIL=os.environ['AWS_SES_SENDER_EMAIL_ID']
 
-# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_USER = 'apikey'
-# EMAIL_HOST_PASSWORD  = os.environ["SENDGRID_API_KEY"]
-# SENDGRID_SANDBOX_MODE_IN_DEBUG = True
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'ctb_send_mails'
+EMAIL_HOST_PASSWORD  = os.environ["SENDGRID_API_KEY"]
+SENDGRID_API_KEY = os.environ['SENDGRID_API_KEY']
+DEFAULT_FROM_EMAIL=os.environ['DEFAULT_FROM_EMAIL']
+SENDGRID_SANDBOX_MODE_IN_DEBUG = True
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 
 # Activate Django-Heroku.

@@ -24,7 +24,7 @@ class Profile(models.Model):
     age = models.IntegerField(null=True)
     gender =models.CharField(choices = GENDER_CHOICES, max_length=50)
     college=models.CharField(max_length=250)
-    year=models.IntegerField(choices = YEAR_CHOICES)
+    year=models.IntegerField(choices = YEAR_CHOICES, null=True)
     score = models.IntegerField(default=0)
     team = models.ForeignKey("teams.Team", blank=True, null=True, on_delete=models.SET_NULL, related_name='users')
     class Meta:
