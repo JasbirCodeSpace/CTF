@@ -6,13 +6,13 @@ from django.db.models import OuterRef, Subquery
 
 def hackerboard(request):
     set_team_scores()
-    model_max_set = Team.objects.values('college_name').annotate(max_score=Max('score')).order_by()
+    # model_max_set = Team.objects.values('college_name').annotate(max_score=Max('score')).order_by()
 
-    q_statement = Q()
-    for pair in model_max_set:
-        q_statement |= (Q(college_name__exact=pair['college_name']) & Q(score=pair['max_score']))
+    # q_statement = Q()
+    # for pair in model_max_set:
+    #     q_statement |= (Q(college_name__exact=pair['college_name']) & Q(score=pair['max_score']))
 
-    teams = Team.objects.filter(q_statement)
+    # teams = Team.objects.filter(q_statement)
 
     # top_teams_per_college = Team.objects.filter(
     #                                     college_name=OuterRef('college_name')
@@ -20,6 +20,10 @@ def hackerboard(request):
     # teams = Team.objects.filter(
     #         id__in=Subquery(top_teams_per_college.values('id'))
     #     )
+    
+    teams = Team.objects.raw('''SELECT * FROM teams_team as teams
+                                ORDER BY teams.score DESC
+                            ''')
     result = []
     for team in teams:
         t = {}

@@ -14,6 +14,19 @@
 {% endblock css %}
 
 {% block content %}
+	{% if exception %}
+	<div class="row">
+			<div class="alert alert-danger col-md-4 mt-2 mx-auto">
+					<strong>{{ exception|escape }}</strong>
+			</div>
+	</div>
+	{% else %}
+	<div class="row">
+		<div class="alert alert-danger col-md-4 mt-2 mx-auto">
+				<strong>Something went wrong</strong>
+		</div>
+	</div>
+	{% endif %}
 {% endblock content %}
 
 

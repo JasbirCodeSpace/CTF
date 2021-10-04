@@ -25,5 +25,6 @@ urlpatterns = [
     path('', include('home.urls')),
 ]
 # error handlers
+handler403 = 'home.views.error.handler403'
 handler404 = 'home.views.error.handler404'
 handler500 = 'home.views.error.handler500'
