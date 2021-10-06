@@ -5,6 +5,13 @@
 	{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}" />
+    <style>
+        @media screen and (max-width: 55em) {
+            body{
+                background-image: none;
+            }
+        }
+    </style>
 {% endblock css %}
 
 {% block content %}

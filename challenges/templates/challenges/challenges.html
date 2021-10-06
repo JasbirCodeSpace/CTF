@@ -181,7 +181,7 @@
           <script type="text/javascript">
             $(document).ready(function (){
               $("#challenge_id_{{ challenge.id }}_form").submit(function(event) {
-                event.preventDefault();
+                
                 $.ajax({
                   type : "POST",
                   url : "{% url 'flagsubmit' %}",
@@ -192,12 +192,16 @@
                     setTimeout(function(){
                         if ($('#alert-{{challenge.id}}').length > 0) {
                             $('#alert-{{challenge.id}}').hide();
-                            window.location.reload();
+                            let text = document.querySelector('#alert-{{challenge.id}} .alert-text').textContent;
+                            if(text === "Correct"){
+                              window.location.reload();
+                            }
                         }
                     }, 2000) 
                   },
 
                 });
+                event.preventDefault();
                 
               });
             });

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse
-from teams.forms.team import TeamCaptainForm, TeamModelForm, TeamUpdateForm
+from teams.forms.team import TeamCaptainForm, TeamUpdateForm
 from accounts.models.profile import Profile
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -26,7 +26,7 @@ def team_create(request):
         if form.is_valid():
             team = Team()
             team.team_name = form.cleaned_data['team_name']
-            team.college_name = form.cleaned_data['college_name']
+            team.college_name = request.user.profile.college
             team.password = form.cleaned_data['password']
             team.team_leader = request.user
             team.save()
@@ -36,7 +36,7 @@ def team_create(request):
             profile.save(update_fields=['team'])
             return redirect('home')
     else:
-        form = TeamRegister()
+        form = TeamRegister(initial={'college_name':request.user.profile.college})
     return render(request, 'teams/team-create.html', {'form':form})
 
 @login_required(login_url='profile-login')
@@ -94,13 +94,6 @@ def get_team_stats(team):
     
     return users,submissions, team_score
 
-# class TeamUpdateView(BSModalUpdateView):
-#     model = Team
-#     template_name = 'teams/team-update.html'
-#     form_class = TeamModelForm
-#     success_message = 'Success: Team details updated successfully'
-#     def get_success_url(self):
-#         return reverse('team-view', args=[self.object.team_name])
 
 @require_http_methods(["GET", "POST"])
 @login_required
@@ -110,6 +103,7 @@ def team_update(request, pk):
     team = get_object_or_404(Team, pk=pk)
     if request.method == "POST":
         form = TeamUpdateForm(request.POST or None, instance = team)
+
         if form.is_valid():
             form.save()
             return redirect(team)

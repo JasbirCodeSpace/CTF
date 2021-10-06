@@ -13,6 +13,7 @@
 <div class="jumbotron bg-transparent mb-0 pt-3 radius-0">
     <div class="container ">
         <h1 class="display-3 bold color_white content__title text-center">{{team.team_name}}</h1>
+        <h5 class="display-5 text-center m-3">College: <span><u>{{team.college_name}}</u></span></h5>
         <h5 class="display-5  text-center">Members: <span class="badge badge-primary">{{members|length}}</span></h5>
         <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
         {% if request.user == team.team_leader %}
@@ -101,6 +102,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
+                                <th>Challenge</th>
                                 <th>Score</th>
                                 <th>Date & Time</th>
                             </tr>
@@ -109,6 +111,7 @@
                             {% for submission in submissions %}
                             <tr class="bg-dark">
                                 <td>{{forloop.counter}}</td>
+                                <td>{{submission.user.user}}</td>
                                 <td>{{submission.challenge.title}}</td>
                                 <td>{{submission.challenge.score}}</td>
                                 <td>{{submission.timestamp|date:'Y-m-d H:i'}}</td>

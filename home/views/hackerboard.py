@@ -21,8 +21,13 @@ def hackerboard(request):
     #         id__in=Subquery(top_teams_per_college.values('id'))
     #     )
     
-    teams = Team.objects.raw('''SELECT * FROM teams_team as teams
-                                ORDER BY teams.score DESC
+    teams = Team.objects.raw(''' select t.id, t.college_name, t.team_name, t.score,
+                                RANK() OVER (Partition by t.college_name order by t.score desc) as collegeRank,
+                                Rank() OVER (order by t.score desc) as globalRank
+                                from(
+                                    select id, college_name, team_name, score
+                                    from teams_team
+                                ) as t;
                             ''')
     result = []
     for team in teams:
@@ -30,6 +35,8 @@ def hackerboard(request):
         t['college'] = team.college_name
         t['name'] = team.team_name
         t['solves'], t['score'] = get_team_stats(team)
+        t['college_rank'] = team.collegeRank
+        t['global_rank'] = team.globalRank
         result.append(t)
     return render(request, 'home/hackerboard.html', {'teams': result})
 

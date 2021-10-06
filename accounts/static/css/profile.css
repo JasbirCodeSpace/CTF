@@ -3,7 +3,7 @@
 	height: 100%;
 }
 .content__title {
-	font-size: 10vh;
+	font-size: 5vh;
 	margin: 20vh 0 0 0;
 }
 .display-5{
@@ -14,7 +14,7 @@
 
 @media screen and (max-width: 55em) {
     .content__title{
-		margin: 5vh 0 0 0;
+		margin: 4vh 0 0 0;
 		font-size: 6vh;
 	}
 	.display-5{

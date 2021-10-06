@@ -35,19 +35,21 @@
                 <table class="table score-col table-hover table-responsive-sm table-danger">
                     <thead class="thead-dark hackerFont">
                         <tr>
-                            <th>#</th>
+                            <th># Global Rank</th>
                             <th>Team Name</th>
                             <th># Challenges Solved</th>
                             <th>Score</th>
+                            <th># College Rank</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for team in teams %}
                         <tr scope="row">
-                            <th scope="row">{{ forloop.counter }}</th>
+                            <th scope="row">{{ team.global_rank }}</th>
                             <td><a href="{% url 'team-view' team.name %}" class="text-decoration-none text-white">{{team.name}}</a></td>
                             <td class="text-white">{{team.solves}}</td>
                             <td class="text-white">{{team.score}}</td>
+                            <th scope="row">{{ team.college_rank }}</th>
                         </tr>
                         {% endfor %}
                     </tbody>

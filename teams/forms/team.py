@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 
 class TeamRegister(forms.ModelForm):
     team_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Team name'}), max_length=50, required=True, help_text="Enter team name")
-    college_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'College name'}), max_length=50, required=True, help_text="Enter college name")
+    college_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'College name', 'readonly':'readonly'}), max_length=50, required=True, help_text="Enter college name")
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Team password'}), max_length=50, required=True, help_text="Enter team password")
 
     class Meta:
@@ -41,34 +41,21 @@ class TeamJoin(forms.Form):
             raise forms.ValidationError("Invalid team name or password")
         return cleaned_data
 
-class TeamModelForm(forms.ModelForm):
-    team_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Team name'}), max_length=50, required=True, help_text="Enter team name")
-    college_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'College name'}), max_length=50, required=True, help_text="Enter college name")
-    password = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Team password'}), max_length=50, required=True, help_text="Enter team password")
-
-    class Meta:
-        model = Team
-        fields= ['team_name', 'college_name', 'password']
-    def clean_team_name(self):
-        team_name = self.cleaned_data['team_name']
-        if Team.objects.filter(team_name = team_name).exists():
-            raise forms.ValidationError("Team with this name already exist")
-        return team_name
 
 class TeamUpdateForm(forms.ModelForm):
     team_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Team name'}), max_length=50, required=True, help_text="Enter team name")
-    college_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'College name'}), max_length=50, required=True, help_text="Enter college name")
     password = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Team password'}), max_length=50, required=True, help_text="Enter team password")
 
     class Meta:
         model = Team
-        fields= ['team_name', 'college_name', 'password']
+        fields= ['team_name', 'password']
     
-    def clean_team_name(self):
-        team_name = self.cleaned_data['team_name']
-        if Team.objects.filter(team_name = team_name).exists():
-            raise forms.ValidationError("Team with this name already exist")
-        return team_name
+    # def clean_team_name(self):
+    #     team_name = self.cleaned_data['team_name']
+    #     print(self)
+    #     if Team.objects.filter(team_name = team_name).exists():
+    #         raise forms.ValidationError("Team with this name already exist")
+    #     return team_name
 
 class TeamCaptainForm(forms.Form):
     team_captain = forms.ModelChoiceField(queryset=User.objects.all(),widget=forms.Select(attrs={'class':'form-control'}),empty_label=None)

@@ -21,6 +21,7 @@
         {% if team %}
         <h5 class="display-5  text-center">Team: <a class="text-white text-decoration-none" href="{% url 'team-view' team %}"><span class="badge badge-primary">{{team}}</span></a></h5>
         {% endif %}
+        <h5 class="display-5 text-center m-3">College: <span><u>{{user.profile.college}}</u></span></h5>
         <h5 class="display-5  text-center">Score: <span class="badge badge-primary">{{score}}</span></h5>
         {% if request.user == user %}
             <div class="pt-3 d-flex flex-row justify-content-center align-items-center">

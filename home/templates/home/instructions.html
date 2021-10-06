@@ -5,6 +5,13 @@
 	{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}" />
+    <style>
+        @media screen and (max-width: 55em) {
+            body{
+                background-image: none;
+            }
+        }
+    </style>
 {% endblock css %}
 
 {% block content %}
@@ -30,10 +37,17 @@
                         </h5>
                         <ul>
                             <li>The contest is open only for MCA students of India.</li>
-                            <li>Students can participate as an individual or max of 5-member team. Every participant must be a part of a team for being visible on the hackerboard.</li>
+                            <li>Students can participate as an individual or in a team. Every participant must 
+                                be a part of a team (create an individual team in case you are playing alone) 
+                                for being visible on the hacker board.</li>
                             <li>All the members of a team must belong to the same institute.</li>
                             <li>Participants has to leave (or disband in case of captain) the existing team before joining the new one.</li>
-                            <li>Only the top scorer team of every college will make it to the hacker board.</li>      
+                            <li>Only the top scorer team of every college will make it to the hacker board.</li>
+                            <li>At the end of the Contest, the top 3 teams from different colleges having maximum 
+                                scores will win.</li>
+                            <li>In case of a tie, different parameters like no. of members in the team, the total 
+                                number of wrong attempts, flags submission timestamp, etc. will be 
+                                considered.</li>     
                         </ul>
                         <h5 class="bold color_white pt-3">
                             General Rules and Instructions
@@ -49,7 +63,7 @@
                             Special Rules and Instructions
                         </h5>
                         <ul>
-                            <li>Dont try to hack anything apart from this CTF Network </li>
+                            <li>Dont try to hack anything apart from this CTB Network </li>
                             <li>Dont try to hack other members </li>
                             <li>Dont spoil! Dont share how you solved each challenge with other members. </li>
                             <li>Performing denial of service attacks on the server will lead to disqualification. You are requested to play ethically.</li>
