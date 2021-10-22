@@ -11,6 +11,15 @@
 			background-size: cover;
 			background-position: center center;
 		}
+		/* .alert-container{
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		} */
+		.alert{
+			margin-top: 4.5rem !important;
+		}
 		nav{
 			background: #000;
 		}
@@ -24,13 +33,16 @@
 {% endblock css %}
 
 {% block content %}
-	{% if message %}
-		<div class="container">
+
+<div class="jumbotron bg-transparent radius-0">
+    <div class="container h-100 d-flex justify-content-center mt-5">
+		{% if exception %}
 			<div class="alert alert-danger">
-				<strong>{{ message|escape }}</strong>
+				<strong>{{ exception|escape }}</strong>
 			</div>
-		</div>
-	{% endif %}
+		{% endif %}
+	</div>
+</div>
 
 {% endblock content %}
 

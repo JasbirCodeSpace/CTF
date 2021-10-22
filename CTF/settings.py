@@ -13,16 +13,17 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-if 'AWS_ACCESS_KEY_ID' in os.environ:
-    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-    AWS_S3_REGION_NAME=os.environ['AWS_S3_REGION_NAME']
-    AWS_STORAGE_BUCKET_NAME=os.environ['AWS_STORAGE_BUCKET_NAME']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # load_dotenv(os.path.join(BASE_DIR, '.env'))
 
+if 'AWS_ACCESS_KEY_ID' in os.environ:
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+    AWS_S3_REGION_NAME=os.environ['AWS_S3_REGION_NAME']
+    AWS_STORAGE_BUCKET_NAME=os.environ['AWS_STORAGE_BUCKET_NAME']
+    
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -32,7 +33,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ['DEBUG']=='True')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'ctb2-env.eba-8vx9fdsb.ap-south-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'ctb-env.eba-2prnxpqz.ap-south-1.elasticbeanstalk.com']
 
 
 # Application definition
