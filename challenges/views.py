@@ -9,6 +9,10 @@ from challenges.models import Challenge, Submission
 from django.http import HttpResponse, JsonResponse
 
 @login_required(login_url='profile-login')
+def completed(request):
+    return render(request, 'challenges/completed.html')
+    
+@login_required(login_url='profile-login')
 def challenges(request):
 
     user = User.objects.get(username = request.user.username)
