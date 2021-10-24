@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.http.request import QueryDict
 from django.http.response import HttpResponse
 from teams.forms.team import TeamCaptainForm, TeamUpdateForm
 from accounts.models.profile import Profile
@@ -14,6 +15,7 @@ from django.views.generic.edit import DeleteView
 from django.contrib.auth.hashers import check_password, make_password
 import datetime
 import json
+from urllib.parse import parse_qs, quote_plus, urlencode
 
 salt = "Y:[zTwN/z-[u2>{b"
 
@@ -163,8 +165,14 @@ def team_leave(request, pk):
 @login_required
 def team_invite(request, teamname):
     team = get_object_or_404(Team, team_name = teamname)
-    invitation_code = request.GET['code']
-    if check_password(team.password, invitation_code):
+    users_count = team.users.all().count()
+
+    if users_count>=5:
+        raise PermissionDenied("Maximum 5 members allowed per team.")
+
+    invitation_code = request.GET['code'].replace(" ", "+")
+
+    if check_password(team.password,invitation_code):
         if request.user.profile.team is not None and request.user.profile.team.team_leader == request.user:
             raise PermissionDenied("Disband your team before joining this team.")
         Profile.objects.filter(user=request.user).update(team = team)

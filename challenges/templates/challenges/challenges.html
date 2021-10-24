@@ -116,7 +116,7 @@
                       </div>
                       <div class="row m-2">
                         {% if challenge.file %}
-                        <a target="_blank" href="uploads/{{challenge.file}}" class="btn btn-danger btn-shadow"><span class="fa fa-download mr-2"></span>Download</a>
+                        <a target="_blank" href="uploads/{{challenge.file}}" download="{{challenge.file}}" class="btn btn-danger btn-shadow"><span class="fa fa-download mr-2"></span>Download</a>
                         {% endif %}
                         {% if challenge.hint %}
                         <a href="#hint_{{ challenge.id }}" data-toggle="modal" data-target="#challenge_hint_{{challenge.id}}" class="btn btn-danger btn-shadow"><span class="far fa-lightbulb mr-2"></span>Hint</a>

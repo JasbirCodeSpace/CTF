@@ -36,9 +36,15 @@ class TeamJoin(forms.Form):
         cleaned_data = super(TeamJoin, self).clean()
         team_name = cleaned_data['team_name']
         password = cleaned_data['password']
-        print(Team.objects.filter(team_name = team_name, password = password))
-        if not Team.objects.filter(team_name = team_name, password = password).exists():
+        team = Team.objects.filter(team_name = team_name, password = password)
+
+        if not team:
             raise forms.ValidationError("Invalid team name or password")
+
+        if team.first().users.all().count()>=5:
+
+            raise forms.ValidationError("Maximum 5 members allowed per team.")
+ 
         return cleaned_data
 
 

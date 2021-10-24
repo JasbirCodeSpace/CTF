@@ -33,7 +33,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ['DEBUG']=='True')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'ctb-env.eba-2prnxpqz.ap-south-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'ctb-env.eba-2prnxpqz.ap-south-1.elasticbeanstalk.com', 'ctb.version21.in', 'ctb.vmothra.fun', '13.232.146.135']
 
 
 # Application definition
